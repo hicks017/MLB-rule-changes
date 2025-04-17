@@ -1,18 +1,29 @@
 ---
 title: "Draft"
-author: "Christian Hicks"
-bibliography: references.bib
-csl: reference_style_vancouver.csl
+author:
+  name: Christian Hicks
+  url: https://github.com/hicks017
+bibliography: resources/references.bib
+csl: resources/reference_style_vancouver.csl
 format:
   html:
     embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    date: 2025-04-13
+    date-modified: last-modified
+description: An analysis of rule changes recent to 2025 Major League Baseball.
 editor: visual
 ---
 
-## Intro
+## Background
 
 The year 2020 brought big changes to the world, such as how Major League Baseball (MLB) is played. In fact, the five-year span of 2019-2023 had the largest number of rule changes in any other five-year span of MLB history [@inc_mlb_nodate]. These efforts aimed to reduce the length of games, increase scoring, preserve player safety, and increase viewership. The introduction of the three‑batter minimum for relief pitchers in 2020 sought to remove one‑ and two‑batter “specialist” relievers and thereby reduce the number of pitching changes that prolong games [@noauthor_these_nodate; @noauthor_three-batter_nodate; @noauthor_three-batter_nodate-1]. In the same year the league introduced the infamous "Manfred Man", an extra‑innings runner on second base to promote earlier scoring and shorten games stuck in a stalemate [@noauthor_designated_nodate; @noauthor_designated_nodate-3; @noauthor_ghost_2023]. The universal designated hitter eliminated the pitcher’s plate appearance and intended to boost offensive production [@noauthor_designated_nodate-1; @noauthor_designated_nodate-2; @noauthor_new_nodate].
 
 In 2022, MLB continued the offensive and safety initiatives. Bases were increased in size from 15″ to 18″ to shorten the distance between bags, with the dual-purpose of encouraging more stolen‑base attempts and reducing dangerous collisions [@noauthor_base_nodate; @noauthor_base_nodate-1]. Additionally, restrictions on defensive positioning prevented "the shift", an extreme alignment that countered pull-hitters and reduced their suppressed batting‑average‐on‐balls‐in‐play (BABIP) [@noauthor_defensive_nodate; @noauthor_defensive_nodate-1]. Finally, the pitch clock and batter‑box enforcement policy were deployed in 2023 to accelerate the game tempo [@noauthor_pitch_nodate; @noauthor_pitch_nodate-1; @noauthor_pitch_nodate-2].
+
+While each of these rule changes intends to improve the MLB viewing experiences, or protect MLB players, their real-world effects require systematic and independent quantification. This analysis leverages publicly available pitch-by-pitch, play-by-play, and other game day datasets to measure key metrics before and after each rule's implementation. Comparing metrics with pre- and post-rule windows aims to provide empirical evidence on the efficacy of MLB's recent innovations and inform future decision-making in professional baseball.
 
 ## References
