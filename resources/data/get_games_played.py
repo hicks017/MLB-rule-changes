@@ -16,7 +16,7 @@ BASE_URL = "https://statsapi.mlb.com/api/v1"
 GAME_TYPES = "R"
 FIRST_SEASON = 2014
 LAST_SEASON = 2025
-OUTPUT_FILE = "team_games_per_year.csv"
+OUTPUT_FILE = "games_played_yearly.csv"
 # -------------------------------
 
 # Async function to fetch the schedule for a given season,
@@ -24,7 +24,7 @@ OUTPUT_FILE = "team_games_per_year.csv"
 async def fetch_season_games(session, season, semaphore):
     schedule_url = f"{BASE_URL}/schedule"
     params = {
-        "sportId": 1,         # MLB
+        "sportId": 1, # MLB
         "season": season,
         "gameTypes": GAME_TYPES
     }
@@ -80,7 +80,7 @@ async def main():
 
     async with aiohttp.ClientSession() as session:
       
-        # Process seasons 2014 through 2024.
+        # Process the seasons defined as constant variables.
         tasks = []
         for season in range(FIRST_SEASON, LAST_SEASON):
             print(f"Processing season {season}...")
@@ -115,6 +115,7 @@ async def main():
     game_counts.to_csv(OUTPUT_FILE, index=False)
     print(f"Data collection complete. Saved to '{OUTPUT_FILE}'.")
 
+# Run async functions and report the elapsed time
 if __name__ == "__main__":
     start_time = time.time()
     asyncio.run(main())
