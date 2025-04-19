@@ -12,17 +12,17 @@ import time
 # LAST_SEASON: Year to end (not included)
 # OUTPUT_FILE: File name and extension for export
 # -------------------------------
-BASE_URL = "https://statsapi.mlb.com/api/v1/"
-GAME_TYPES = "R"    # R = Regular season games
-FIRST_SEASON = 2014 # Inclusive
-LAST_SEASON = 2025  # Exclusive
+BASE_URL = "https://statsapi.mlb.com/api/v1"
+GAME_TYPES = "R"
+FIRST_SEASON = 2014
+LAST_SEASON = 2025
 OUTPUT_FILE = "team_games_per_year.csv"
 # -------------------------------
 
 # Async function to fetch the schedule for a given season,
 # extract each game’s teams, game id (gamePk), and game datetime.
 async def fetch_season_games(session, season, semaphore):
-    schedule_url = f"{BASE_URL}schedule"
+    schedule_url = f"{BASE_URL}/schedule"
     params = {
         "sportId": 1,         # MLB
         "season": season,
