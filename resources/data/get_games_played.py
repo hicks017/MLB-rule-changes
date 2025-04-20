@@ -33,7 +33,7 @@ async def fetch_season_games(session, season, semaphore):
         try:
             async with session.get(schedule_url, params=params) as response:
               
-                # Handle unwanted status
+                # Handle unwanted status.
                 if response.status != 200:
                     print(f"Failed to fetch schedule for season {season}. Status: {response.status}")
                     return []
@@ -42,21 +42,21 @@ async def fetch_season_games(session, season, semaphore):
             print(f"Exception while fetching schedule for season {season}: {e}")
             return []
     
-    # Gather desired data
+    # Gather desired data.
     game_entries = []
     for day in schedule.get("dates", []):
         for game in day.get("games", []):
             
-            # Extract game metadata
+            # Extract game metadata.
             game_pk = game.get("gamePk")
             game_datetime = game.get("gameDate")
             
-            # Extract the away and home teams
+            # Extract the away and home teams.
             teams_data = game.get("teams", {})
             away_team = teams_data.get("away", {}).get("team", {}).get("name")
             home_team = teams_data.get("home", {}).get("team", {}).get("name")
                  
-            # Append one entry per team appearance
+            # Append one entry per team appearance.
             if away_team and game_pk:
                 game_entries.append({
                     "team_name": away_team,
@@ -73,7 +73,7 @@ async def fetch_season_games(session, season, semaphore):
                 })
     return game_entries
 
-# Run tasks to fetch data
+# Run tasks to fetch data.
 async def main():
     semaphore = asyncio.Semaphore(10)  # Limit concurrent schedule requests.
     all_game_entries = []
@@ -91,7 +91,7 @@ async def main():
             if result is not None:
                 all_game_entries.extend(result)
     
-    # Handle empty entries
+    # Handle empty entries.
     if not all_game_entries:
         print("No game data collected.")
         return
@@ -101,7 +101,8 @@ async def main():
     df['game_datetime'] = pd.to_datetime(df['game_datetime'], errors='coerce')
     df['year'] = df['game_datetime'].dt.year
     
-    # Remove duplicate game records (if the same game_pk appears more than once for a team)
+    # Remove duplicate game records.
+    # (If the same game_pk appears more than once for a team).
     df = df.drop_duplicates(subset=['team_name', 'season', 'game_pk'])
     
     # Group by team_name and season to count unique games played.
@@ -115,7 +116,7 @@ async def main():
     game_counts.to_csv(OUTPUT_FILE, index=False)
     print(f"Data collection complete. Saved to '{OUTPUT_FILE}'.")
 
-# Run async functions and report the elapsed time
+# Run async functions and report the elapsed time.
 if __name__ == "__main__":
     start_time = time.time()
     asyncio.run(main())

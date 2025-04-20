@@ -22,7 +22,8 @@ LAST_SEASON = 2025
 OUTPUT_FILE = "pitcher_appearances.csv"
 # -------------------------------
 
-# Async function to fetch the live feed for a given game and extract pitcher IDs along with team info.
+# Async function to fetch the live feed for a given game
+# and extract pitcher IDs along with team info.
 async def fetch_game_data(session, game_pk, semaphore):
     url = f"{BASE_URL_GAME}/game/{game_pk}/feed/live"
     async with semaphore:
@@ -102,7 +103,7 @@ async def fetch_season_games(session, season):
                 game_pks.append(game_pk)
     return game_pks
 
-# Run tasks to fetch data
+# Run tasks to fetch data.
 async def main():
     semaphore = asyncio.Semaphore(10)  # Limit concurrent requests to 10
     all_game_pitcher_data = []
@@ -113,6 +114,7 @@ async def main():
             game_pks = await fetch_season_games(session, season)
             print(f"Found {len(game_pks)} games for season {season}")
 
+            # Define the tasks for each game.
             tasks = [fetch_game_data(session, game_pk, semaphore) for game_pk in game_pks]
             
             # Use tqdm to track progress as tasks complete.
@@ -140,7 +142,7 @@ async def main():
     df.to_csv(OUTPUT_FILE, index=False)
     print(f"Data collection complete. Saved to '{OUTPUT_FILE}'.")
 
-# Run async functions and report the elapsed time
+# Run async functions and report the elapsed time.
 if __name__ == "__main__":
     start_time = time.time()
     asyncio.run(main())
