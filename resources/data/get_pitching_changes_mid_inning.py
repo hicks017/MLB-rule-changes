@@ -58,7 +58,7 @@ def identify_mid_inning_pitching_changes(game_feed):
         isTopInning = about.get("isTopInning")
         
         # Get current pitcher id (if available) from the matchup field.
-        current_pitcher = play.get("matchup", {}).get("pitcher", {}).get("id")
+        current_pitcher = play.get("matchup", {}).get("pitcher", {}).get("fullName")
         
         # Look into the nested playEvents to see
         # if a pitching change is indicated.
@@ -79,8 +79,8 @@ def identify_mid_inning_pitching_changes(game_feed):
                         "game_id": game_id,
                         "year": year,
                         "team_name": team_name,
-                        "pitcher_id_old": prev_pitcher,
-                        "pitcher_id_new": current_pitcher
+                        "pitcher_old": prev_pitcher,
+                        "pitcher_new": current_pitcher
                     })
                     
                 # Once a pitching change event is found in this play, move on.
@@ -176,7 +176,7 @@ async def main():
         return
 
     # Build a DataFrame from the list of event dictionaries.
-    df_events = pd.DataFrame(all_events, columns=["game_id", "year", "team_name", "pitcher_id_old", "pitcher_id_new"])
+    df_events = pd.DataFrame(all_events, columns=["game_id", "year", "team_name", "pitcher_old", "pitcher_new"])
     
     # Save the aggregated results to CSV.
     df_events.to_csv(OUTPUT_FILE, index=False)
