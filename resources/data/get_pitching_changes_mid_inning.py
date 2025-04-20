@@ -78,6 +78,7 @@ def identify_mid_inning_pitching_changes(game_feed):
                     events.append({
                         "game_id": game_id,
                         "year": year,
+                        "game_datetime": game_dt,
                         "team_name": team_name,
                         "pitcher_old": prev_pitcher,
                         "pitcher_new": current_pitcher
@@ -176,7 +177,7 @@ async def main():
         return
 
     # Build a DataFrame from the list of event dictionaries.
-    df_events = pd.DataFrame(all_events, columns=["game_id", "year", "team_name", "pitcher_old", "pitcher_new"])
+    df_events = pd.DataFrame(all_events, columns=["game_id", "year", "game_datetime", "team_name", "pitcher_old", "pitcher_new"])
     
     # Save the aggregated results to CSV.
     df_events.to_csv(OUTPUT_FILE, index=False)
