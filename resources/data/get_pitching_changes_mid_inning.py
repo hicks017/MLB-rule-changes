@@ -20,7 +20,7 @@ BASE_URL_SCHEDULE = "https://statsapi.mlb.com/api/v1"
 GAME_TYPES = "R"
 FIRST_SEASON = 2014
 LAST_SEASON = 2025
-OUTPUT_FILE = "pitcher_appearances.csv"
+OUTPUT_FILE = "pitcher_changes.csv"
 # -------------------------------
 
 # Ensure datetime columns are in proper format.
