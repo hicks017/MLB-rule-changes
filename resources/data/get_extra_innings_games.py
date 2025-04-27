@@ -83,6 +83,7 @@ async def fetch_game_details(session, game, semaphore):
             return None  # Game did not go extra innings.
         
         final_inning = innings[-1].get("num", len(innings))
+        game_datetime = data["gameData"].get("datetime", {})
         
         # Extract team names from gameData.
         home_team = data["gameData"]["teams"]["home"]["name"]
@@ -101,6 +102,7 @@ async def fetch_game_details(session, game, semaphore):
         
         return {
             "year": game["season"],
+            "game_datetime":game_datetime,
             "game_pk": game_pk,
             "team_winner": team_winner,
             "team_loser": team_loser,
@@ -147,7 +149,8 @@ async def main():
     
     # Build the DataFrame with the selected columns.
     df = pd.DataFrame(results)
-    df = df[["year", "game_pk", "team_winner", "team_loser", "final_inning"]]
+    df['game_datetime'] = df['game_datetime'].apply(lambda x: pd.to_datetime(x['dateTime']))
+    df = df[["year", "game_datetime", "game_pk", "team_winner", "team_loser", "final_inning"]]
     
     # Export the results to CSV.
     df.to_csv(OUTPUT_FILE, index=False)
