@@ -18,7 +18,7 @@ BASE_URL = "https://statsapi.mlb.com/api/v1"
 LIVE_FEED_URL = "https://statsapi.mlb.com/api/v1.1/game"
 GAME_TYPES = "R"
 FIRST_SEASON = 2014
-LAST_SEASON = 2015
+LAST_SEASON = 2025
 OUTPUT_FILE = "extra_innings_games.csv"
 # -------------------------------
 
@@ -78,36 +78,61 @@ async def fetch_game_details(session, game, semaphore):
             return None
 
     try:
-        innings = data["liveData"]["linescore"].get("innings", [])
+        linescore = data["liveData"]["linescore"]
+        innings   = linescore.get("innings", [])
         if len(innings) <= 9:
             return None  # Game did not go extra innings.
-        
+
+        # Final inning number
         final_inning = innings[-1].get("num", len(innings))
-        game_datetime = data["gameData"].get("datetime", {})
-        
-        # Extract team names from gameData.
-        home_team = data["gameData"]["teams"]["home"]["name"]
-        away_team = data["gameData"]["teams"]["away"]["name"]
-        
-        # Extract final runs from linescore.
-        home_runs = data["liveData"]["linescore"]["teams"].get("home", {}).get("runs", 0)
-        away_runs = data["liveData"]["linescore"]["teams"].get("away", {}).get("runs", 0)
-        
-        if home_runs > away_runs:
-            team_winner = home_team
-            team_loser = away_team
+
+        # Total runs scored after the 9th
+        total_extra_runs = sum(
+            (inn.get("home", {}).get("runs", 0) +
+             inn.get("away", {}).get("runs", 0))
+            for inn in innings
+            if inn.get("num", 0) > 9
+        )
+
+        # Count batters until first run in extras
+        plays = data["liveData"]["plays"]["allPlays"]
+        batters = 0
+        batters_until_first_run = None
+        for pl in plays:
+            inn = pl["about"]["inning"]
+            if inn <= 9:
+                continue
+            batters += 1
+            rbi = pl["result"].get("rbi", 0)
+            if rbi and batters_until_first_run is None:
+                batters_until_first_run = batters
+                break
+
+        # Teams & winner/loser
+        home = data["gameData"]["teams"]["home"]["name"]
+        away = data["gameData"]["teams"]["away"]["name"]
+        runs_home = linescore["teams"]["home"]["runs"]
+        runs_away = linescore["teams"]["away"]["runs"]
+
+        if runs_home > runs_away:
+            winner, loser = home, away
         else:
-            team_winner = away_team
-            team_loser = home_team
-        
+            winner, loser = away, home
+
+        # Game datetime
+        gdt = data["gameData"]["datetime"].get("dateTime")
+
         return {
             "year": game["season"],
-            "game_datetime":game_datetime,
-            "game_pk": game_pk,
-            "team_winner": team_winner,
-            "team_loser": team_loser,
-            "final_inning": final_inning
+            "game_datetime": gdt,
+            "game_pk":       game_pk,
+            "team_winner":   winner,
+            "team_loser":    loser,
+            "final_inning":  final_inning,
+            "batters_until_first_run": batters_until_first_run,
+            "total_extra_runs": total_extra_runs
         }
+        
     except Exception as e:
         print(f"Error processing game_pk {game_pk}: {e}")
         return None
@@ -149,8 +174,12 @@ async def main():
     
     # Build the DataFrame with the selected columns.
     df = pd.DataFrame(results)
-    df['game_datetime'] = df['game_datetime'].apply(lambda x: pd.to_datetime(x['dateTime']))
-    df = df[["year", "game_datetime", "game_pk", "team_winner", "team_loser", "final_inning"]]
+    df["game_datetime"] = pd.to_datetime(df["game_datetime"])
+    df = df[[
+        "year", "game_datetime", "game_pk",
+        "team_winner", "team_loser", "final_inning",
+        "total_extra_runs", "batters_until_first_run"
+    ]]
     
     # Export the results to CSV.
     df.to_csv(OUTPUT_FILE, index=False)
