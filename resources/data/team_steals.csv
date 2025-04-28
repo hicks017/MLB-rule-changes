@@ -1,0 +1,331 @@
+season,team_id,team_name,stolen_bases,caught_stealing,sb_success_rate
+2023,144,Atlanta Braves,132,27,.830
+2023,140,Texas Rangers,79,19,.806
+2023,139,Tampa Bay Rays,160,41,.796
+2023,146,Miami Marlins,86,21,.804
+2023,117,Houston Astros,107,32,.770
+2023,111,Boston Red Sox,112,26,.812
+2023,119,Los Angeles Dodgers,105,25,.808
+2023,141,Toronto Blue Jays,99,34,.744
+2023,143,Philadelphia Phillies,141,26,.844
+2023,110,Baltimore Orioles,114,24,.826
+2023,112,Chicago Cubs,140,34,.805
+2023,120,Washington Nationals,127,29,.814
+2023,114,Cleveland Guardians,151,36,.807
+2023,109,Arizona Diamondbacks,166,26,.865
+2023,138,St. Louis Cardinals,101,29,.777
+2023,113,Cincinnati Reds,190,48,.798
+2023,115,Colorado Rockies,76,25,.752
+2023,108,Los Angeles Angels,72,31,.699
+2023,118,Kansas City Royals,163,47,.776
+2023,135,San Diego Padres,137,32,.811
+2023,142,Minnesota Twins,86,18,.827
+2023,136,Seattle Mariners,118,30,.797
+2023,158,Milwaukee Brewers,129,28,.822
+2023,134,Pittsburgh Pirates,117,41,.741
+2023,121,New York Mets,118,15,.887
+2023,145,Chicago White Sox,86,22,.796
+2023,116,Detroit Tigers,85,23,.787
+2023,137,San Francisco Giants,57,16,.781
+2023,147,New York Yankees,100,30,.769
+2023,133,Oakland Athletics,149,31,.828
+2018,111,Boston Red Sox,125,31,.801
+2018,114,Cleveland Indians,135,36,.789
+2018,139,Tampa Bay Rays,128,51,.715
+2018,112,Chicago Cubs,66,38,.635
+2018,144,Atlanta Braves,90,36,.714
+2018,115,Colorado Rockies,95,33,.742
+2018,117,Houston Astros,71,26,.732
+2018,136,Seattle Mariners,79,37,.681
+2018,120,Washington Nationals,119,33,.783
+2018,113,Cincinnati Reds,77,33,.700
+2018,134,Pittsburgh Pirates,70,38,.648
+2018,158,Milwaukee Brewers,124,32,.795
+2018,133,Oakland Athletics,35,21,.625
+2018,119,Los Angeles Dodgers,75,24,.758
+2018,142,Minnesota Twins,47,27,.635
+2018,147,New York Yankees,63,21,.750
+2018,138,St. Louis Cardinals,63,32,.663
+2018,118,Kansas City Royals,117,38,.755
+2018,141,Toronto Blue Jays,47,30,.610
+2018,108,Los Angeles Angels,89,22,.802
+2018,116,Detroit Tigers,70,30,.700
+2018,145,Chicago White Sox,98,41,.705
+2018,140,Texas Rangers,74,35,.679
+2018,110,Baltimore Orioles,81,22,.786
+2018,137,San Francisco Giants,77,34,.694
+2018,146,Miami Marlins,45,31,.592
+2018,109,Arizona Diamondbacks,79,25,.760
+2018,135,San Diego Padres,95,36,.725
+2018,121,New York Mets,71,39,.645
+2018,143,Philadelphia Phillies,69,26,.726
+2014,116,Detroit Tigers,106,41,.721
+2014,115,Colorado Rockies,85,48,.639
+2014,119,Los Angeles Dodgers,138,50,.734
+2014,118,Kansas City Royals,153,36,.810
+2014,134,Pittsburgh Pirates,104,47,.689
+2014,108,Los Angeles Angels,81,39,.675
+2014,141,Toronto Blue Jays,78,21,.788
+2014,140,Texas Rangers,105,59,.640
+2014,110,Baltimore Orioles,44,20,.688
+2014,137,San Francisco Giants,56,27,.675
+2014,142,Minnesota Twins,99,36,.733
+2014,120,Washington Nationals,101,23,.815
+2014,114,Cleveland Indians,104,27,.794
+2014,138,St. Louis Cardinals,57,32,.640
+2014,146,Miami Marlins,58,21,.734
+2014,145,Chicago White Sox,85,36,.702
+2014,158,Milwaukee Brewers,102,43,.703
+2014,109,Arizona Diamondbacks,86,33,.723
+2014,139,Tampa Bay Rays,63,27,.700
+2014,147,New York Yankees,112,26,.812
+2014,133,Oakland Athletics,83,20,.806
+2014,111,Boston Red Sox,63,25,.716
+2014,136,Seattle Mariners,96,42,.696
+2014,143,Philadelphia Phillies,109,26,.807
+2014,117,Houston Astros,122,37,.767
+2014,144,Atlanta Braves,95,33,.742
+2014,112,Chicago Cubs,65,40,.619
+2014,121,New York Mets,101,34,.748
+2014,113,Cincinnati Reds,122,52,.701
+2014,135,San Diego Padres,91,34,.728
+2017,117,Houston Astros,98,42,.700
+2017,115,Colorado Rockies,59,34,.634
+2017,146,Miami Marlins,91,30,.752
+2017,120,Washington Nationals,108,30,.783
+2017,114,Cleveland Indians,88,23,.793
+2017,144,Atlanta Braves,77,31,.713
+2017,147,New York Yankees,90,22,.804
+2017,110,Baltimore Orioles,32,13,.711
+2017,142,Minnesota Twins,95,28,.772
+2017,118,Kansas City Royals,91,31,.746
+2017,136,Seattle Mariners,89,35,.718
+2017,116,Detroit Tigers,65,34,.657
+2017,111,Boston Red Sox,106,31,.774
+2017,138,St. Louis Cardinals,81,31,.723
+2017,145,Chicago White Sox,71,31,.696
+2017,112,Chicago Cubs,62,31,.667
+2017,109,Arizona Diamondbacks,103,30,.774
+2017,113,Cincinnati Reds,120,39,.755
+2017,121,New York Mets,58,23,.716
+2017,143,Philadelphia Phillies,59,25,.702
+2017,158,Milwaukee Brewers,128,41,.757
+2017,119,Los Angeles Dodgers,77,28,.733
+2017,137,San Francisco Giants,76,34,.691
+2017,133,Oakland Athletics,57,22,.722
+2017,139,Tampa Bay Rays,88,34,.721
+2017,140,Texas Rangers,113,44,.720
+2017,134,Pittsburgh Pirates,67,36,.650
+2017,108,Los Angeles Angels,136,44,.756
+2017,141,Toronto Blue Jays,53,24,.688
+2017,135,San Diego Padres,89,33,.730
+2020,121,New York Mets,20,10,.667
+2020,144,Atlanta Braves,23,4,.852
+2020,111,Boston Red Sox,31,9,.775
+2020,120,Washington Nationals,33,12,.733
+2020,137,San Francisco Giants,19,8,.704
+2020,145,Chicago White Sox,20,8,.714
+2020,110,Baltimore Orioles,19,14,.576
+2020,115,Colorado Rockies,42,9,.824
+2020,143,Philadelphia Phillies,35,8,.814
+2020,135,San Diego Padres,55,13,.809
+2020,119,Los Angeles Dodgers,29,8,.784
+2020,141,Toronto Blue Jays,33,6,.846
+2020,108,Los Angeles Angels,21,8,.724
+2020,147,New York Yankees,27,7,.794
+2020,116,Detroit Tigers,19,6,.760
+2020,118,Kansas City Royals,49,20,.710
+2020,146,Miami Marlins,51,14,.785
+2020,142,Minnesota Twins,14,7,.667
+2020,109,Arizona Diamondbacks,23,7,.767
+2020,117,Houston Astros,22,11,.667
+2020,139,Tampa Bay Rays,48,9,.842
+2020,138,St. Louis Cardinals,18,10,.643
+2020,114,Cleveland Indians,25,10,.714
+2020,136,Seattle Mariners,50,16,.758
+2020,133,Oakland Athletics,26,3,.897
+2020,158,Milwaukee Brewers,15,11,.577
+2020,112,Chicago Cubs,24,10,.706
+2020,134,Pittsburgh Pirates,16,11,.593
+2020,140,Texas Rangers,49,14,.778
+2020,113,Cincinnati Reds,29,9,.763
+2022,141,Toronto Blue Jays,67,35,.657
+2022,121,New York Mets,62,22,.738
+2022,111,Boston Red Sox,52,20,.722
+2022,119,Los Angeles Dodgers,98,18,.845
+2022,145,Chicago White Sox,58,10,.853
+2022,115,Colorado Rockies,45,20,.692
+2022,114,Cleveland Guardians,119,27,.815
+2022,143,Philadelphia Phillies,105,28,.789
+2022,144,Atlanta Braves,87,31,.737
+2022,138,St. Louis Cardinals,95,25,.792
+2022,120,Washington Nationals,75,31,.708
+2022,117,Houston Astros,83,22,.790
+2022,142,Minnesota Twins,38,17,.691
+2022,118,Kansas City Royals,104,34,.754
+2022,147,New York Yankees,102,33,.756
+2022,135,San Diego Padres,49,22,.690
+2022,139,Tampa Bay Rays,95,37,.720
+2022,140,Texas Rangers,128,41,.757
+2022,112,Chicago Cubs,111,37,.750
+2022,110,Baltimore Orioles,95,31,.754
+2022,113,Cincinnati Reds,58,33,.637
+2022,158,Milwaukee Brewers,96,30,.762
+2022,137,San Francisco Giants,64,16,.800
+2022,108,Los Angeles Angels,77,27,.740
+2022,116,Detroit Tigers,47,24,.662
+2022,109,Arizona Diamondbacks,104,29,.782
+2022,146,Miami Marlins,122,29,.808
+2022,136,Seattle Mariners,83,27,.755
+2022,134,Pittsburgh Pirates,89,32,.736
+2022,133,Oakland Athletics,78,23,.772
+2021,117,Houston Astros,53,16,.768
+2021,141,Toronto Blue Jays,81,20,.802
+2021,111,Boston Red Sox,40,21,.656
+2021,120,Washington Nationals,56,26,.683
+2021,145,Chicago White Sox,57,20,.740
+2021,113,Cincinnati Reds,36,24,.600
+2021,137,San Francisco Giants,66,14,.825
+2021,115,Colorado Rockies,76,23,.768
+2021,118,Kansas City Royals,124,33,.790
+2021,108,Los Angeles Angels,79,26,.752
+2021,119,Los Angeles Dodgers,65,17,.793
+2021,144,Atlanta Braves,59,19,.756
+2021,138,St. Louis Cardinals,89,22,.802
+2021,139,Tampa Bay Rays,88,42,.677
+2021,135,San Diego Padres,110,39,.738
+2021,116,Detroit Tigers,88,25,.779
+2021,142,Minnesota Twins,54,15,.783
+2021,143,Philadelphia Phillies,77,19,.802
+2021,110,Baltimore Orioles,54,23,.701
+2021,121,New York Mets,54,26,.675
+2021,133,Oakland Athletics,88,20,.815
+2021,114,Cleveland Indians,109,17,.865
+2021,147,New York Yankees,63,18,.778
+2021,112,Chicago Cubs,86,37,.699
+2021,134,Pittsburgh Pirates,60,30,.667
+2021,109,Arizona Diamondbacks,43,16,.729
+2021,158,Milwaukee Brewers,82,21,.796
+2021,146,Miami Marlins,106,29,.785
+2021,140,Texas Rangers,106,29,.785
+2021,136,Seattle Mariners,64,24,.727
+2016,111,Boston Red Sox,83,24,.776
+2016,115,Colorado Rockies,66,39,.629
+2016,116,Detroit Tigers,58,29,.667
+2016,146,Miami Marlins,71,28,.717
+2016,140,Texas Rangers,99,36,.733
+2016,114,Cleveland Indians,134,31,.812
+2016,118,Kansas City Royals,121,35,.776
+2016,109,Arizona Diamondbacks,137,31,.815
+2016,108,Los Angeles Angels,73,34,.682
+2016,136,Seattle Mariners,56,28,.667
+2016,137,San Francisco Giants,79,36,.687
+2016,134,Pittsburgh Pirates,110,45,.710
+2016,145,Chicago White Sox,77,36,.681
+2016,112,Chicago Cubs,66,34,.660
+2016,110,Baltimore Orioles,19,13,.594
+2016,113,Cincinnati Reds,139,51,.732
+2016,120,Washington Nationals,121,39,.756
+2016,138,St. Louis Cardinals,35,26,.574
+2016,144,Atlanta Braves,75,34,.688
+2016,147,New York Yankees,72,22,.766
+2016,142,Minnesota Twins,91,32,.740
+2016,119,Los Angeles Dodgers,45,26,.634
+2016,141,Toronto Blue Jays,54,24,.692
+2016,117,Houston Astros,102,44,.699
+2016,121,New York Mets,42,18,.700
+2016,133,Oakland Athletics,50,23,.685
+2016,158,Milwaukee Brewers,181,56,.764
+2016,139,Tampa Bay Rays,60,37,.619
+2016,143,Philadelphia Phillies,96,45,.681
+2016,135,San Diego Padres,125,45,.735
+2019,117,Houston Astros,67,27,.713
+2019,142,Minnesota Twins,28,21,.571
+2019,111,Boston Red Sox,68,30,.694
+2019,147,New York Yankees,55,22,.714
+2019,115,Colorado Rockies,71,31,.696
+2019,120,Washington Nationals,116,29,.800
+2019,134,Pittsburgh Pirates,64,29,.688
+2019,145,Chicago White Sox,63,28,.692
+2019,144,Atlanta Braves,89,28,.761
+2019,119,Los Angeles Dodgers,57,10,.851
+2019,121,New York Mets,56,27,.675
+2019,139,Tampa Bay Rays,94,37,.718
+2019,112,Chicago Cubs,45,24,.652
+2019,109,Arizona Diamondbacks,88,14,.863
+2019,114,Cleveland Indians,103,35,.746
+2019,133,Oakland Athletics,49,21,.700
+2019,140,Texas Rangers,131,38,.775
+2019,108,Los Angeles Angels,65,20,.765
+2019,118,Kansas City Royals,117,39,.750
+2019,158,Milwaukee Brewers,101,25,.802
+2019,110,Baltimore Orioles,84,30,.737
+2019,143,Philadelphia Phillies,78,18,.813
+2019,138,St. Louis Cardinals,116,29,.800
+2019,113,Cincinnati Reds,80,38,.678
+2019,146,Miami Marlins,55,30,.647
+2019,116,Detroit Tigers,57,20,.740
+2019,137,San Francisco Giants,47,28,.627
+2019,135,San Diego Padres,70,37,.654
+2019,136,Seattle Mariners,115,47,.710
+2019,141,Toronto Blue Jays,51,20,.718
+2015,116,Detroit Tigers,83,51,.619
+2015,141,Toronto Blue Jays,88,23,.793
+2015,118,Kansas City Royals,104,34,.754
+2015,137,San Francisco Giants,93,36,.721
+2015,115,Colorado Rockies,97,43,.693
+2015,111,Boston Red Sox,71,27,.724
+2015,109,Arizona Diamondbacks,132,44,.750
+2015,146,Miami Marlins,112,45,.713
+2015,134,Pittsburgh Pirates,98,45,.685
+2015,140,Texas Rangers,101,39,.721
+2015,114,Cleveland Indians,86,28,.754
+2015,138,St. Louis Cardinals,69,38,.645
+2015,139,Tampa Bay Rays,87,45,.659
+2015,158,Milwaukee Brewers,84,29,.743
+2015,144,Atlanta Braves,69,33,.676
+2015,120,Washington Nationals,57,23,.713
+2015,147,New York Yankees,63,25,.716
+2015,133,Oakland Athletics,78,29,.729
+2015,119,Los Angeles Dodgers,59,34,.634
+2015,110,Baltimore Orioles,44,25,.638
+2015,117,Houston Astros,121,48,.716
+2015,145,Chicago White Sox,68,42,.618
+2015,136,Seattle Mariners,69,45,.605
+2015,143,Philadelphia Phillies,88,32,.733
+2015,113,Cincinnati Reds,134,38,.779
+2015,142,Minnesota Twins,70,38,.648
+2015,108,Los Angeles Angels,52,34,.605
+2015,121,New York Mets,51,25,.671
+2015,112,Chicago Cubs,95,37,.720
+2015,135,San Diego Padres,82,29,.739
+2024,135,San Diego Padres,120,28,.811
+2024,109,Arizona Diamondbacks,119,30,.799
+2024,117,Houston Astros,93,24,.795
+2024,119,Los Angeles Dodgers,136,23,.855
+2024,143,Philadelphia Phillies,148,30,.831
+2024,111,Boston Red Sox,144,44,.766
+2024,110,Baltimore Orioles,98,25,.797
+2024,158,Milwaukee Brewers,217,42,.838
+2024,147,New York Yankees,88,26,.772
+2024,118,Kansas City Royals,134,31,.812
+2024,138,St. Louis Cardinals,91,29,.758
+2024,121,New York Mets,106,22,.828
+2024,142,Minnesota Twins,65,23,.739
+2024,146,Miami Marlins,125,43,.744
+2024,144,Atlanta Braves,69,20,.775
+2024,120,Washington Nationals,223,73,.753
+2024,112,Chicago Cubs,143,30,.827
+2024,115,Colorado Rockies,85,31,.733
+2024,141,Toronto Blue Jays,72,16,.818
+2024,137,San Francisco Giants,68,22,.756
+2024,140,Texas Rangers,97,25,.795
+2024,114,Cleveland Guardians,148,46,.763
+2024,134,Pittsburgh Pirates,106,19,.848
+2024,116,Detroit Tigers,76,24,.760
+2024,133,Oakland Athletics,98,26,.790
+2024,113,Cincinnati Reds,207,45,.821
+2024,139,Tampa Bay Rays,178,53,.771
+2024,108,Los Angeles Angels,133,50,.727
+2024,136,Seattle Mariners,140,28,.833
+2024,145,Chicago White Sox,90,33,.732
