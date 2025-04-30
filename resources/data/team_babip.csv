@@ -1,0 +1,331 @@
+season,team_id,team_name,babip
+2019,117,Houston Astros,.296
+2019,142,Minnesota Twins,.300
+2019,111,Boston Red Sox,.313
+2019,147,New York Yankees,.306
+2019,115,Colorado Rockies,.321
+2019,120,Washington Nationals,.306
+2019,134,Pittsburgh Pirates,.309
+2019,145,Chicago White Sox,.329
+2019,144,Atlanta Braves,.305
+2019,119,Los Angeles Dodgers,.291
+2019,121,New York Mets,.299
+2019,139,Tampa Bay Rays,.306
+2019,112,Chicago Cubs,.297
+2019,109,Arizona Diamondbacks,.293
+2019,114,Cleveland Indians,.289
+2019,133,Oakland Athletics,.282
+2019,140,Texas Rangers,.304
+2019,108,Los Angeles Angels,.281
+2019,118,Kansas City Royals,.301
+2019,158,Milwaukee Brewers,.296
+2019,110,Baltimore Orioles,.293
+2019,143,Philadelphia Phillies,.293
+2019,138,St. Louis Cardinals,.292
+2019,113,Cincinnati Reds,.288
+2019,146,Miami Marlins,.300
+2019,116,Detroit Tigers,.308
+2019,137,San Francisco Giants,.290
+2019,135,San Diego Padres,.293
+2019,136,Seattle Mariners,.287
+2019,141,Toronto Blue Jays,.280
+2020,121,New York Mets,.320
+2020,144,Atlanta Braves,.322
+2020,111,Boston Red Sox,.321
+2020,120,Washington Nationals,.308
+2020,137,San Francisco Giants,.311
+2020,145,Chicago White Sox,.314
+2020,110,Baltimore Orioles,.309
+2020,115,Colorado Rockies,.316
+2020,143,Philadelphia Phillies,.299
+2020,135,San Diego Padres,.291
+2020,119,Los Angeles Dodgers,.276
+2020,141,Toronto Blue Jays,.297
+2020,108,Los Angeles Angels,.284
+2020,147,New York Yankees,.280
+2020,116,Detroit Tigers,.314
+2020,118,Kansas City Royals,.297
+2020,146,Miami Marlins,.306
+2020,142,Minnesota Twins,.283
+2020,109,Arizona Diamondbacks,.282
+2020,117,Houston Astros,.273
+2020,139,Tampa Bay Rays,.300
+2020,138,St. Louis Cardinals,.290
+2020,114,Cleveland Indians,.277
+2020,136,Seattle Mariners,.281
+2020,133,Oakland Athletics,.271
+2020,158,Milwaukee Brewers,.278
+2020,112,Chicago Cubs,.270
+2020,134,Pittsburgh Pirates,.268
+2020,140,Texas Rangers,.266
+2020,113,Cincinnati Reds,.245
+2014,116,Detroit Tigers,.319
+2014,115,Colorado Rockies,.326
+2014,119,Los Angeles Dodgers,.318
+2014,118,Kansas City Royals,.302
+2014,134,Pittsburgh Pirates,.307
+2014,108,Los Angeles Angels,.305
+2014,141,Toronto Blue Jays,.295
+2014,140,Texas Rangers,.305
+2014,110,Baltimore Orioles,.296
+2014,137,San Francisco Giants,.304
+2014,142,Minnesota Twins,.309
+2014,120,Washington Nationals,.303
+2014,114,Cleveland Indians,.296
+2014,138,St. Louis Cardinals,.300
+2014,146,Miami Marlins,.316
+2014,145,Chicago White Sox,.306
+2014,158,Milwaukee Brewers,.293
+2014,109,Arizona Diamondbacks,.293
+2014,139,Tampa Bay Rays,.287
+2014,147,New York Yankees,.282
+2014,133,Oakland Athletics,.278
+2014,111,Boston Red Sox,.297
+2014,136,Seattle Mariners,.290
+2014,143,Philadelphia Phillies,.292
+2014,117,Houston Astros,.298
+2014,144,Atlanta Braves,.298
+2014,112,Chicago Cubs,.296
+2014,121,New York Mets,.286
+2014,113,Cincinnati Reds,.284
+2014,135,San Diego Padres,.277
+2024,135,San Diego Padres,.295
+2024,109,Arizona Diamondbacks,.302
+2024,117,Houston Astros,.299
+2024,119,Los Angeles Dodgers,.297
+2024,143,Philadelphia Phillies,.306
+2024,111,Boston Red Sox,.314
+2024,110,Baltimore Orioles,.288
+2024,158,Milwaukee Brewers,.305
+2024,147,New York Yankees,.283
+2024,118,Kansas City Royals,.283
+2024,138,St. Louis Cardinals,.294
+2024,121,New York Mets,.291
+2024,142,Minnesota Twins,.289
+2024,146,Miami Marlins,.299
+2024,144,Atlanta Braves,.291
+2024,120,Washington Nationals,.288
+2024,112,Chicago Cubs,.291
+2024,115,Colorado Rockies,.308
+2024,141,Toronto Blue Jays,.283
+2024,137,San Francisco Giants,.290
+2024,140,Texas Rangers,.279
+2024,114,Cleveland Guardians,.271
+2024,134,Pittsburgh Pirates,.291
+2024,116,Detroit Tigers,.288
+2024,133,Oakland Athletics,.284
+2024,113,Cincinnati Reds,.283
+2024,139,Tampa Bay Rays,.289
+2024,108,Los Angeles Angels,.279
+2024,136,Seattle Mariners,.284
+2024,145,Chicago White Sox,.272
+2022,141,Toronto Blue Jays,.305
+2022,121,New York Mets,.302
+2022,111,Boston Red Sox,.313
+2022,119,Los Angeles Dodgers,.302
+2022,145,Chicago White Sox,.304
+2022,115,Colorado Rockies,.307
+2022,114,Cleveland Guardians,.294
+2022,143,Philadelphia Phillies,.299
+2022,144,Atlanta Braves,.303
+2022,138,St. Louis Cardinals,.289
+2022,120,Washington Nationals,.295
+2022,117,Houston Astros,.278
+2022,142,Minnesota Twins,.295
+2022,118,Kansas City Royals,.293
+2022,147,New York Yankees,.276
+2022,135,San Diego Padres,.289
+2022,139,Tampa Bay Rays,.295
+2022,140,Texas Rangers,.287
+2022,112,Chicago Cubs,.294
+2022,110,Baltimore Orioles,.284
+2022,113,Cincinnati Reds,.290
+2022,158,Milwaukee Brewers,.279
+2022,137,San Francisco Giants,.283
+2022,108,Los Angeles Angels,.289
+2022,116,Detroit Tigers,.290
+2022,109,Arizona Diamondbacks,.272
+2022,146,Miami Marlins,.284
+2022,136,Seattle Mariners,.272
+2022,134,Pittsburgh Pirates,.277
+2022,133,Oakland Athletics,.264
+2018,111,Boston Red Sox,.309
+2018,114,Cleveland Indians,.291
+2018,139,Tampa Bay Rays,.317
+2018,112,Chicago Cubs,.313
+2018,144,Atlanta Braves,.302
+2018,115,Colorado Rockies,.304
+2018,117,Houston Astros,.289
+2018,136,Seattle Mariners,.295
+2018,120,Washington Nationals,.297
+2018,113,Cincinnati Reds,.307
+2018,134,Pittsburgh Pirates,.298
+2018,158,Milwaukee Brewers,.302
+2018,133,Oakland Athletics,.294
+2018,119,Los Angeles Dodgers,.294
+2018,142,Minnesota Twins,.298
+2018,147,New York Yankees,.285
+2018,138,St. Louis Cardinals,.294
+2018,118,Kansas City Royals,.293
+2018,141,Toronto Blue Jays,.286
+2018,108,Los Angeles Angels,.277
+2018,116,Detroit Tigers,.293
+2018,145,Chicago White Sox,.304
+2018,140,Texas Rangers,.292
+2018,110,Baltimore Orioles,.286
+2018,137,San Francisco Giants,.299
+2018,146,Miami Marlins,.293
+2018,109,Arizona Diamondbacks,.286
+2018,135,San Diego Padres,.294
+2018,121,New York Mets,.283
+2018,143,Philadelphia Phillies,.289
+2015,116,Detroit Tigers,.322
+2015,141,Toronto Blue Jays,.298
+2015,118,Kansas City Royals,.301
+2015,137,San Francisco Giants,.313
+2015,115,Colorado Rockies,.313
+2015,111,Boston Red Sox,.305
+2015,109,Arizona Diamondbacks,.316
+2015,146,Miami Marlins,.307
+2015,134,Pittsburgh Pirates,.314
+2015,140,Texas Rangers,.300
+2015,114,Cleveland Indians,.299
+2015,138,St. Louis Cardinals,.303
+2015,139,Tampa Bay Rays,.300
+2015,158,Milwaukee Brewers,.303
+2015,144,Atlanta Braves,.297
+2015,120,Washington Nationals,.300
+2015,147,New York Yankees,.283
+2015,133,Oakland Athletics,.288
+2015,119,Los Angeles Dodgers,.292
+2015,110,Baltimore Orioles,.291
+2015,117,Houston Astros,.292
+2015,145,Chicago White Sox,.296
+2015,136,Seattle Mariners,.292
+2015,143,Philadelphia Phillies,.299
+2015,113,Cincinnati Reds,.290
+2015,142,Minnesota Twins,.292
+2015,108,Los Angeles Angels,.280
+2015,121,New York Mets,.287
+2015,112,Chicago Cubs,.305
+2015,135,San Diego Padres,.292
+2016,111,Boston Red Sox,.320
+2016,115,Colorado Rockies,.326
+2016,116,Detroit Tigers,.312
+2016,146,Miami Marlins,.314
+2016,140,Texas Rangers,.298
+2016,114,Cleveland Indians,.304
+2016,118,Kansas City Royals,.309
+2016,109,Arizona Diamondbacks,.315
+2016,108,Los Angeles Angels,.289
+2016,136,Seattle Mariners,.297
+2016,137,San Francisco Giants,.299
+2016,134,Pittsburgh Pirates,.311
+2016,145,Chicago White Sox,.304
+2016,112,Chicago Cubs,.302
+2016,110,Baltimore Orioles,.291
+2016,113,Cincinnati Reds,.303
+2016,120,Washington Nationals,.293
+2016,138,St. Louis Cardinals,.294
+2016,144,Atlanta Braves,.305
+2016,147,New York Yankees,.289
+2016,142,Minnesota Twins,.300
+2016,119,Los Angeles Dodgers,.294
+2016,141,Toronto Blue Jays,.289
+2016,117,Houston Astros,.298
+2016,121,New York Mets,.282
+2016,133,Oakland Athletics,.280
+2016,158,Milwaukee Brewers,.304
+2016,139,Tampa Bay Rays,.293
+2016,143,Philadelphia Phillies,.291
+2016,135,San Diego Padres,.291
+2021,117,Houston Astros,.303
+2021,141,Toronto Blue Jays,.296
+2021,111,Boston Red Sox,.309
+2021,120,Washington Nationals,.307
+2021,145,Chicago White Sox,.310
+2021,113,Cincinnati Reds,.296
+2021,137,San Francisco Giants,.295
+2021,115,Colorado Rockies,.299
+2021,118,Kansas City Royals,.292
+2021,108,Los Angeles Angels,.294
+2021,119,Los Angeles Dodgers,.284
+2021,144,Atlanta Braves,.288
+2021,138,St. Louis Cardinals,.287
+2021,139,Tampa Bay Rays,.294
+2021,135,San Diego Padres,.287
+2021,116,Detroit Tigers,.300
+2021,142,Minnesota Twins,.282
+2021,143,Philadelphia Phillies,.286
+2021,110,Baltimore Orioles,.290
+2021,121,New York Mets,.291
+2021,133,Oakland Athletics,.278
+2021,114,Cleveland Indians,.282
+2021,147,New York Yankees,.285
+2021,112,Chicago Cubs,.296
+2021,134,Pittsburgh Pirates,.290
+2021,109,Arizona Diamondbacks,.295
+2021,158,Milwaukee Brewers,.283
+2021,146,Miami Marlins,.296
+2021,140,Texas Rangers,.280
+2021,136,Seattle Mariners,.273
+2023,144,Atlanta Braves,.306
+2023,140,Texas Rangers,.310
+2023,139,Tampa Bay Rays,.308
+2023,146,Miami Marlins,.308
+2023,117,Houston Astros,.294
+2023,111,Boston Red Sox,.310
+2023,119,Los Angeles Dodgers,.294
+2023,141,Toronto Blue Jays,.301
+2023,143,Philadelphia Phillies,.308
+2023,110,Baltimore Orioles,.305
+2023,112,Chicago Cubs,.303
+2023,120,Washington Nationals,.293
+2023,114,Cleveland Guardians,.292
+2023,109,Arizona Diamondbacks,.293
+2023,138,St. Louis Cardinals,.291
+2023,113,Cincinnati Reds,.306
+2023,115,Colorado Rockies,.315
+2023,108,Los Angeles Angels,.295
+2023,118,Kansas City Royals,.296
+2023,135,San Diego Padres,.283
+2023,142,Minnesota Twins,.304
+2023,136,Seattle Mariners,.301
+2023,158,Milwaukee Brewers,.292
+2023,134,Pittsburgh Pirates,.296
+2023,121,New York Mets,.275
+2023,145,Chicago White Sox,.289
+2023,116,Detroit Tigers,.291
+2023,137,San Francisco Giants,.290
+2023,147,New York Yankees,.266
+2023,133,Oakland Athletics,.276
+2017,117,Houston Astros,.309
+2017,115,Colorado Rockies,.332
+2017,146,Miami Marlins,.313
+2017,120,Washington Nationals,.311
+2017,114,Cleveland Indians,.295
+2017,144,Atlanta Braves,.305
+2017,147,New York Yankees,.304
+2017,110,Baltimore Orioles,.306
+2017,142,Minnesota Twins,.306
+2017,118,Kansas City Royals,.295
+2017,136,Seattle Mariners,.300
+2017,116,Detroit Tigers,.306
+2017,111,Boston Red Sox,.300
+2017,138,St. Louis Cardinals,.304
+2017,145,Chicago White Sox,.309
+2017,112,Chicago Cubs,.302
+2017,109,Arizona Diamondbacks,.306
+2017,113,Cincinnati Reds,.294
+2017,121,New York Mets,.286
+2017,143,Philadelphia Phillies,.304
+2017,158,Milwaukee Brewers,.308
+2017,119,Los Angeles Dodgers,.293
+2017,137,San Francisco Giants,.294
+2017,133,Oakland Athletics,.294
+2017,139,Tampa Bay Rays,.296
+2017,140,Texas Rangers,.291
+2017,134,Pittsburgh Pirates,.286
+2017,108,Los Angeles Angels,.277
+2017,141,Toronto Blue Jays,.276
+2017,135,San Diego Padres,.287
