@@ -16,23 +16,123 @@ description: Exploratory data analysis of the three batter minimum.
 editor: visual
 ---
 
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+## Setup
 
 ```{r}
-1 + 1
-```
+#| code-summary: Packages
+#| message: false
 
-You can add options to executable code like this
+library(knitr)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(broom)
+library(skimr)
+```
 
 ```{r}
-#| echo: false
-2 * 2
+#| code-summary: Data
+#| message: false
+
+# Use a flexible route to the file path
+if (basename(getwd()) == "explore data") {
+  path <- "../resources/data/"
+} else if (basename(getwd()) == "MLB-rule-changes") {
+  path <- "resources/data/"
+} else {print("Failed to set path")}
+
+df_appearances <- read_csv(file.path(path, "pitcher_appearances.csv"))
+df_changes <- read_csv(file.path(path, "pitcher_changes.csv"))
 ```
 
-The `echo: false` option disables the printing of code (only output is displayed).
+## Pitching appearances
+
+```{r}
+#| code-summary: Prepare data
+
+# Change name for Cleveland to the Guardians
+df_appearances <- mutate(df_appearances, team_name = ifelse(
+  endsWith(team_name, "Indians"),
+  "Cleveland Guardians",
+  team_name
+))
+
+# Count pitching changes per game by year
+tbl_n_per_game_yearly <- 
+  df_appearances |>
+  group_by(game_id, year) |>
+  summarise(n = n(), .groups = "drop") |>
+  
+  # Add indication of rule change and change year to a factor
+  mutate(rule_change = ifelse(year < 2020, FALSE, TRUE)) |>
+  mutate(year = factor(year))
+```
+
+How many pitchers are teams using in a game over the years?
+
+With a three-batter minimum, the LOOGY specialty role should mostly be eliminated and fewer pitchers might be used in a game.
+
+```{r}
+# Plot pitchers per game per year
+ggplot(tbl_n_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Total pitchers per game by year")
+
+# Descriptive statistics
+skimr::skim(group_by(select(tbl_n_per_game_yearly, -game_id), year)) |> 
+  skimr::yank("numeric")
+
+# t test
+t.test(n ~ rule_change, data = tbl_n_per_game_yearly) |>
+  tidy() |>
+  rename(pre_2020 = estimate1, post_2020 = estimate2)
+```
+
+Number of pitchers used by both teams has increased since 2020, but the magnitude was small.
+
+## Mid-inning pitching changes
+
+How many pitching changes occurred during inning play in a game over the years?
+
+```{r}
+#| code-summary: Prepare data
+
+# Change name for Cleveland to the Guardians
+df_changes <- mutate(df_changes, team_name = ifelse(
+  endsWith(team_name, "Indians"),
+  "Cleveland Guardians",
+  team_name
+))
+
+# Count pitching changes per game by year
+tbl_changes_per_game_yearly <- 
+  df_changes |>
+  group_by(game_id, year) |>
+  summarise(n = n(), .groups = "drop") |>
+  
+  # Add indication of rule change and change year to a factor
+  mutate(rule_change = ifelse(year < 2020, FALSE, TRUE)) |>
+  mutate(year = factor(year))
+```
+
+A three-batter minimum means there's less opportunity to call in a pitcher for a single batter, which should decrease the number of pitching changes that occur in the middle of an inning.
+
+```{r}
+# Plot pitchers per game per year
+ggplot(tbl_changes_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Total mid-inning pitching changes per game by year")
+
+# Descriptive statistics
+skimr::skim(group_by(select(tbl_changes_per_game_yearly, -game_id), year)) |> 
+  skimr::yank("numeric")
+
+# t test
+t.test(n ~ rule_change, data = tbl_changes_per_game_yearly) |>
+  tidy() |>
+  rename(pre_2020 = estimate1, post_2020 = estimate2)
+```
+
+The number of mid-inning pitching changes decreased since 2020, but the magnitude was small.
