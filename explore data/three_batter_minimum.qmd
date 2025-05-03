@@ -22,7 +22,6 @@ editor: visual
 #| code-summary: Packages
 #| message: false
 
-library(knitr)
 library(readr)
 library(dplyr)
 library(ggplot2)
