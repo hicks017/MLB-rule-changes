@@ -102,6 +102,8 @@ t.test(extras ~ rule_change, data = df_extras) |>
 
 Number of extra innings required to complete a game decreased by just under 1 inning after the rule change.
 
+Note that outlying "marathon" games are much shorter after the rule change, dropping from 7-10 extra innings to 4-5.
+
 ## Total runs in extra innings
 
 How many runs were scored during extra innings?
@@ -131,3 +133,31 @@ t.test(total_extra_runs ~ rule_change, data = df_extras) |>
 ```
 
 Number of runs scored during extra innings per game game increased by almost 1 run after the rule change. The median increased by 2 runs.
+
+## Batters until first score
+
+How many batters appear before the first run is scored in extra innings?
+
+```{r}
+# Summarize by year
+df_extras |>
+  select(year, batters_until_first_run) |>
+  group_by(year) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(df_extras, aes(x = year, y = batters_until_first_run, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Batters until first run scored in extras per game by year")
+
+# t test
+t.test(batters_until_first_run ~ rule_change, data = df_extras) |>
+  tidy() |>
+  rename(pre_2020 = estimate1, post_2020 = estimate2)
+```
+
+Number of batters until first run scored during extra innings per game decreased by more than 8 after the rule change.
+
+Note that the 25th percentile dropped from 5-6 to 2 batters, and the 75th percentile dropped from 16-20 to 7. Additionally, outlying games dropped from 40-60 to 13-30 These are quite big changes.
