@@ -79,10 +79,10 @@ ggplot(df_ops, aes(x = year, y = AB, fill = position)) +
 # t test
 t.test(AB ~ position, data = df_ops) |>
   tidy() |>
-  rename(pre_2020 = estimate1, post_2020 = estimate2)
+  rename(DH_hits = estimate1, pitchers_hit = estimate2)
 ```
 
-Number of at bats were nearly greater by 2 for the DH position during rule change years versus the pitcher position without the rule change.
+Number of at bats were greater by nearly 2 for the DH position during rule change years versus the pitcher position without the rule change.
 
 This tracks with reality because without the rule change, many NL teams might let their starting pitcher swing once so they can stay in the game longer. After the starting pitcher was removed from the game, relief pitchers often would get replaced by a DH when it was their turn for an at bat. This led to the pitcher position not taking many at bats in a game. One caveat though was that the DH had to be replaced by a new pitcher, meaning NL teams may have burned through their bench quicker before the rule change.
 
@@ -112,7 +112,7 @@ ggplot(df_ops, aes(x = year, y = OBP, fill = position)) +
 # t test
 t.test(OBP ~ position, data = df_ops) |>
   tidy() |>
-  rename(pre_2020 = estimate1, post_2020 = estimate2)
+  rename(DH_hit = estimate1, pitchers_hit = estimate2)
 ```
 
 OBP was more than double for the DH compared to pitchers. Median OBP for pitchers was 0.00 before the rule change. The mean has potential for largely being skewed by pitchers who went 1-1 and were replaced by a DH before their second at bat.
@@ -139,7 +139,7 @@ ggplot(df_ops, aes(x = year, y = OPS, fill = position)) +
 # t test
 t.test(OPS ~ position, data = df_ops) |>
   tidy() |>
-  rename(pre_2020 = estimate1, post_2020 = estimate2)
+  rename(DH_hit = estimate1, pitchers_hit = estimate2)
 ```
 
 OPS combines on base percentage and slugging (related to number of bases gained during a hit).

@@ -3413,28 +3413,28 @@ vertical-align: -.125em;
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t test</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(AB <span class="sc">~</span> position, <span class="at">data =</span> df_ops) <span class="sc">|&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">|&gt;</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">pre_2020 =</span> estimate1, <span class="at">post_2020 =</span> estimate2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">DH_hits =</span> estimate1, <span class="at">pitchers_hit =</span> estimate2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 9%">
-<col style="width: 9%">
 <col style="width: 7%">
-<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 11%">
 <col style="width: 8%">
-<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 8%">
 <col style="width: 21%">
 <col style="width: 10%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">estimate</th>
-<th style="text-align: right;">pre_2020</th>
-<th style="text-align: right;">post_2020</th>
+<th style="text-align: right;">DH_hits</th>
+<th style="text-align: right;">pitchers_hit</th>
 <th style="text-align: right;">statistic</th>
 <th style="text-align: right;">p.value</th>
 <th style="text-align: right;">parameter</th>
@@ -3462,7 +3462,7 @@ vertical-align: -.125em;
 </div>
 </div>
 </div>
-<p>Number of at bats were nearly greater by 2 for the DH position during rule change years versus the pitcher position without the rule change.</p>
+<p>Number of at bats were greater by nearly 2 for the DH position during rule change years versus the pitcher position without the rule change.</p>
 <p>This tracks with reality because without the rule change, many NL teams might let their starting pitcher swing once so they can stay in the game longer. After the starting pitcher was removed from the game, relief pitchers often would get replaced by a DH when it was their turn for an at bat. This led to the pitcher position not taking many at bats in a game. One caveat though was that the DH had to be replaced by a new pitcher, meaning NL teams may have burned through their bench quicker before the rule change.</p>
 <p>After the rule change, the DH position could remain the same player the entire game regardless of pitching changes.</p>
 </section>
@@ -3710,7 +3710,7 @@ vertical-align: -.125em;
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t test</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(OBP <span class="sc">~</span> position, <span class="at">data =</span> df_ops) <span class="sc">|&gt;</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">pre_2020 =</span> estimate1, <span class="at">post_2020 =</span> estimate2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">DH_hit =</span> estimate1, <span class="at">pitchers_hit =</span> estimate2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -3718,20 +3718,20 @@ vertical-align: -.125em;
 <colgroup>
 <col style="width: 8%">
 <col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 6%">
 <col style="width: 8%">
 <col style="width: 8%">
-<col style="width: 7%">
 <col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 21%">
+<col style="width: 20%">
 <col style="width: 10%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">estimate</th>
-<th style="text-align: right;">pre_2020</th>
-<th style="text-align: right;">post_2020</th>
+<th style="text-align: right;">DH_hit</th>
+<th style="text-align: right;">pitchers_hit</th>
 <th style="text-align: right;">statistic</th>
 <th style="text-align: right;">p.value</th>
 <th style="text-align: right;">parameter</th>
@@ -4004,7 +4004,7 @@ vertical-align: -.125em;
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t test</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(OPS <span class="sc">~</span> position, <span class="at">data =</span> df_ops) <span class="sc">|&gt;</span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tidy</span>() <span class="sc">|&gt;</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">pre_2020 =</span> estimate1, <span class="at">post_2020 =</span> estimate2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">DH_hit =</span> estimate1, <span class="at">pitchers_hit =</span> estimate2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <div class="kable-table">
@@ -4012,20 +4012,20 @@ vertical-align: -.125em;
 <colgroup>
 <col style="width: 8%">
 <col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 8%">
+<col style="width: 6%">
 <col style="width: 8%">
 <col style="width: 8%">
-<col style="width: 7%">
 <col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 8%">
-<col style="width: 21%">
+<col style="width: 20%">
 <col style="width: 10%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: right;">estimate</th>
-<th style="text-align: right;">pre_2020</th>
-<th style="text-align: right;">post_2020</th>
+<th style="text-align: right;">DH_hit</th>
+<th style="text-align: right;">pitchers_hit</th>
 <th style="text-align: right;">statistic</th>
 <th style="text-align: right;">p.value</th>
 <th style="text-align: right;">parameter</th>
