@@ -1,5 +1,5 @@
 ---
-title: "Extra-innings Baserunner"
+title: "Designated Hitter"
 author:
   name: Christian Hicks
   url: https://github.com/hicks017
@@ -12,7 +12,7 @@ format:
     code-fold: true
     date: 2025-05-03
     date-modified: last-modified
-description: Exploratory data analysis of the extra-innings baserunner on second base.
+description: Exploratory data analysis of universal designated hitter.
 editor: visual
 ---
 
