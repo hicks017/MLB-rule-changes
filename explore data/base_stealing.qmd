@@ -1,0 +1,123 @@
+---
+title: "Changes in base stealing"
+author:
+  name: Christian Hicks
+  url: https://github.com/hicks017
+format:
+  html:
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    date: 2025-05-03
+    date-modified: last-modified
+description: Exploratory data analysis of the changes meant to increase base stealing attempts.
+editor: visual
+---
+
+## Setup
+
+```{r}
+#| code-summary: Packages
+#| message: false
+
+library(readr)
+library(dplyr)
+library(skimr)
+library(ggplot2)
+library(broom)
+```
+
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Use a flexible route to the file path
+if (basename(getwd()) == "explore data") {
+  path <- "../resources/data"
+} else if (basename(getwd()) == "MLB-rule-changes") {
+  path <- "resources/data"
+} else {print("Failed to set path")}
+
+df_steals <- read_csv(file.path(path, "team_steals.csv"))
+
+# Change name for Cleveland to the Guardians
+df_steals <- mutate(df_steals, team_name = ifelse(
+  endsWith(team_name, "Indians"),
+  "Cleveland Guardians",
+  team_name
+))
+```
+
+## Attempts
+
+```{r}
+#| code-summary: Prepare data
+
+df_steals <- mutate(
+  df_steals,
+  
+  # Count total attempts
+  attempts = stolen_bases + caught_stealing,
+  
+  # Indicate rule change
+  rule_change = ifelse(season < 2023, FALSE, TRUE),
+  
+  # Factor the season variable
+  season = factor(season)
+)
+```
+
+How many steals were attempted by teams per season?
+
+```{r}
+
+# Summarize by season
+df_steals |>
+  select(season, attempts) |>
+  group_by(season) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(df_steals, aes(x = season, y = attempts, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  scale_y_continuous(breaks = seq(0, 300, by = 100), limits = c(0, 300)) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Stolen base attempts by year")
+
+# t test
+t.test(attempts ~ rule_change, data = filter(df_steals, season != "2020")) |>
+  tidy() |>
+  rename(pre_2023 = estimate1, post_2023 = estimate2)
+```
+
+Mean stolen base attempts per team in a given season has increased by 36 attempts since the rule change.
+
+Note that 2020 was a shortened season and was removed from the statistical test.
+
+## Success rate
+
+```{r}
+# Summarize by season
+df_steals |>
+  select(season, sb_success_rate) |>
+  group_by(season) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(df_steals, aes(x = season, y = sb_success_rate, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  scale_y_continuous(limits = c(0, 1)) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Stolen base success rate by year")
+
+# t test
+t.test(sb_success_rate ~ rule_change, data = df_steals) |>
+  tidy() |>
+  rename(pre_2023 = estimate1, post_2023 = estimate2)
+```
+
+The rate of successfully stealing a base has increased by almost 7% after the rule change.
