@@ -118,8 +118,8 @@ tbl_duration_filtered_post <- filter(
     & year(startTime) >= 2023
 )
 
-tbl_duration_filtered_pre$group <- "Pre rule change"
-tbl_duration_filtered_post$group <- "Post rule change"
+tbl_duration_filtered_pre[["group"]] <- "Pre rule change"
+tbl_duration_filtered_post[["group"]] <- "Post rule change"
 
 ggplot() +
   
@@ -170,8 +170,12 @@ ggplot() +
   
   labs(
     title = "Shorter play duration after pitch clock implementation",
+    subtitle = paste0(
+      "Total plays = ", formatC(nrow(df_duration), format = "d", big.mark = ",")
+    ),
     x = "Duration (seconds)",
-    y = "Density\nof plays"
+    y = "Density\nof plays",
+    caption = "Filtered for 0 < duration_sec < 271 (95%ile)"
   )
 ```
 
