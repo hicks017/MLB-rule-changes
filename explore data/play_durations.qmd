@@ -96,7 +96,7 @@ options(scipen = old_scipen)  # restore original value
 
 # Visualize with cumaltive distribution (filtered)
 df_duration |>
-  filter(duration_sec > 0 & duration_sec < 423) |>
+  filter(duration_sec > 0 & duration_sec < 423) |> # 99.9%ile
   ggplot(aes(duration_sec)) +
   stat_ecdf(geom = "step") +
   labs(
@@ -195,3 +195,44 @@ t.test(duration_sec ~ rule_change, data = df_duration) |>
 ```
 
 Mean play duration decreased by 48 seconds after the implementation of the pitch clock and the pitcher disengagement policy.
+
+## Game duration
+
+Note: This is not using game start and end time but rather play time during a game.
+
+```{r}
+#| code-summary: Prepare data
+
+tbl_game_duration <- 
+  df_duration |>
+  filter(duration_sec < 423) |> # 99.9%ile
+  group_by(game_pk, season, rule_change) |>
+  summarise(
+    duration_all_plays = sum(duration_sec) / (60 * 60), .groups = "drop" # Output in hours
+  )
+
+```
+
+```{r}
+# Visualize
+ggplot(tbl_game_duration, aes(x = season, y = duration_all_plays, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.5) +
+  scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 1)) +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    axis.title.y = element_text(angle = 0, vjust = 0.5)
+  ) +
+  labs(
+    title = "Lower total play time during games after pitch clock",
+    x = "Year",
+    y = "Total play\nduration (hours)",
+    fill = "Rule change"
+  )
+
+# t test
+t.test(duration_all_plays ~ rule_change, data = tbl_game_duration) |>
+  tidy() |>
+  rename(pre_2023 = estimate1, post_2023 = estimate2)
+```
+
+Mean total play time was reduced by more than 20 minutes (0.36 hours) after pitch clock and pitcher disengagement policy implementation.
