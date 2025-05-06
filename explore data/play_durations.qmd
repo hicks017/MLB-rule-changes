@@ -1,0 +1,193 @@
+---
+title: "Durations of plays and games"
+author:
+  name: Christian Hicks
+  url: https://github.com/hicks017
+format:
+  html:
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    date: 2025-05-04
+    date-modified: last-modified
+description: Exploratory data analysis of the durations of play.
+editor: visual
+---
+
+## Setup
+
+```{r}
+#| code-summary: Packages
+#| message: false
+
+library(readr)
+library(dplyr)
+library(skimr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+library(broom)
+```
+
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Use a flexible route to the file path
+if (basename(getwd()) == "explore data") {
+  path <- "../resources/data"
+} else if (basename(getwd()) == "MLB-rule-changes") {
+  path <- "resources/data"
+} else {print("Failed to set path")}
+
+df_duration <- read_csv(file.path(path, "play_duration.csv"))
+
+# Factorize season
+df_duration <- mutate(df_duration, season = factor(season))
+```
+
+## Individual play duration
+
+Has there been any change in the length of individual plays since the 2023 rule changes?
+
+Note: Specifically pitch clock. Reduced pitcher disengagements could play a role too.
+
+### Data preparation
+
+```{r}
+# Summarize by season
+df_duration |>
+  select(season, duration_sec) |>
+  group_by(season) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+```
+
+Many seasons recorded plays that had negative values and extremely high values. These major outliers need to be removed before performing any analyses.
+
+```{r}
+old_scipen <- getOption("scipen")
+options(scipen = 999)
+
+# Define the percentiles
+probs <- c(
+  1,
+  0.9999,
+  0.999,
+  0.99,
+  0.95,
+  0.9,
+  0.05,
+  0.01,
+  0.001,
+  0.0001,
+  0
+)
+
+# Summarize various percentiles of play duration
+df_duration |>
+  summarise(quantiles = list(quantile(duration_sec, probs = probs))) |>
+  unnest_wider(quantiles) |>
+  pivot_longer(everything(), names_to = "Percentile", values_to = "Seconds")
+
+options(scipen = old_scipen)  # restore original value
+
+# Visualize with cumaltive distribution (filtered)
+df_duration |>
+  filter(duration_sec > 0 & duration_sec < 423) |>
+  ggplot(aes(duration_sec)) +
+  stat_ecdf(geom = "step") +
+  labs(
+    title = "Cumulative density function for play duration",
+    caption = "Filtered for 0 < duration_sec < 423 (99.9%ile)"
+  )
+
+# Visualize with histogram (filtered)
+tbl_duration_filtered_pre <- filter(
+  df_duration,
+  duration_sec > 0
+    & duration_sec < 271 # 95th percentile
+    & year(startTime) < 2023
+)
+tbl_duration_filtered_post <- filter(
+  df_duration,
+  duration_sec > 0
+    & duration_sec < 271 # 95th percentile
+    & year(startTime) >= 2023
+)
+
+tbl_duration_filtered_pre$group <- "Pre rule change"
+tbl_duration_filtered_post$group <- "Post rule change"
+
+ggplot() +
+  
+  # Post rule change
+  geom_density(
+    data = tbl_duration_filtered_post,
+    aes(x = duration_sec, fill = group),
+    color = NA
+  ) +
+  
+  # Pre rule change
+  geom_density(
+    data = tbl_duration_filtered_pre,
+    aes(x = duration_sec, fill = group),
+    color = NA
+  ) +
+  
+  # Post rule change (line)
+  geom_density(
+    data = tbl_duration_filtered_post,
+    aes(x = duration_sec),
+    color = "orange",
+    linewidth = 2
+  ) +
+  
+  # Pre rule change (line)
+  geom_density(
+    data = tbl_duration_filtered_pre,
+    aes(x = duration_sec),
+    color = "black"
+  ) +
+  
+  # Formatting
+  scale_fill_manual(
+    name = "Rule Change",
+    values = c("Pre rule change" = "skyblue", "Post rule change" = "orange")
+  ) +
+  
+  scale_x_continuous(breaks = seq(0, 250, by = 50), expand = c(0,0)) +
+  
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(angle = 0, vjust = 0.5),
+    legend.position = "inside",
+    legend.position.inside = c(0.8, 0.8),
+    legend.title = element_blank()
+  ) +
+  
+  labs(
+    title = "Shorter play duration after pitch clock implementation",
+    x = "Duration (seconds)",
+    y = "Density\nof plays"
+  )
+```
+
+### Analysis
+
+```{r}
+# Indicate rule change
+df_duration <- mutate(
+  df_duration,
+  rule_change = ifelse(year(startTime) < 2023, FALSE, TRUE)
+)
+
+# t test
+t.test(duration_sec ~ rule_change, data = df_duration) |>
+  tidy() |>
+  rename(pre_2023 = estimate1, post_2023 = estimate2)
+```
+
+Mean play duration decreased by 48 seconds after the implementation of the pitch clock and the pitcher disengagement policy.
