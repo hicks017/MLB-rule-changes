@@ -138,6 +138,12 @@ Number of runs scored during extra innings per game game increased by almost 1 r
 
 How many batters appear before the first run is scored in extra innings?
 
+t.test(batters_until_first_run \~ rule_change, data = df_extras) \|\>
+
+tidy() \|\>
+
+rename(pre_2020 = estimate1, post_2020 = estimate2)
+
 ```{r}
 # Summarize by year
 df_extras |>
@@ -161,3 +167,97 @@ t.test(batters_until_first_run ~ rule_change, data = df_extras) |>
 Number of batters until first run scored during extra innings per game decreased by more than 8 after the rule change.
 
 Note that the 25th percentile dropped from 5-6 to 2 batters, and the 75th percentile dropped from 16-20 to 7. Additionally, outlying games dropped from 40-60 to 13-30 These are quite big changes.
+
+## Marathon games
+
+Defining marathon games as those in the 95th percentile for a given season.
+
+```{r}
+#| code-summary: Prepare data
+
+# Select the games at and above the 75th percentile for final inning, by season
+tbl_marathons <- 
+  df_extras |>
+  group_by(year) |>
+  filter(final_inning >= quantile(final_inning, probs = 0.95, na.rm = TRUE)) |>
+  ungroup()
+```
+
+### Final inning
+
+What does extra innings count, runs in extras, and batters until first run look like in each season's longest games?
+
+```{r}
+# Summarize 95th percentile of final inning
+tbl_marathons |>
+  group_by(year) |>
+  select(final_inning) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize 95th percentile of final inning
+ggplot(tbl_marathons, aes(x = year, y = final_inning, fill = rule_change)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(10, 20), breaks = seq(10, 20, by = 2)) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Final inning for 95th percentile of game length by year")
+
+# t test
+t.test(final_inning ~ rule_change, data = tbl_marathons) |>
+  tidy() |>
+  rename(pre_2020 = estimate1, post_2020 = estimate2)
+```
+
+The mean final inning of the 95th percentile of each season decreased by nearly 3 innings after the rule change.
+
+### Total runs
+
+How many runs were scored in marathon games across the seasons?
+
+```{r}
+# Summarize by year
+tbl_marathons |>
+  select(year, total_extra_runs) |>
+  group_by(year) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(tbl_marathons, aes(x = year, y = total_extra_runs, fill = rule_change)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(0, 12), breaks = seq(0, 12, by = 2)) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Total runs scored during marathon games by year")
+
+# t test
+t.test(total_extra_runs ~ rule_change, data = tbl_marathons) |>
+  tidy() |>
+  rename(pre_2020 = estimate1, post_2020 = estimate2)
+```
+
+Total runs during marathon games increased by slightly more than 2 runs after the rule change.
+
+### Batters until first score
+
+```{r}
+# Summarize by year
+tbl_marathons |>
+  select(year, batters_until_first_run) |>
+  group_by(year) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(tbl_marathons, aes(x = year, y = batters_until_first_run, fill = rule_change)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(0, 90), breaks = seq(0, 90, by = 10)) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Batters until first run scored in marathon games by year")
+
+# t test
+t.test(batters_until_first_run ~ rule_change, data = tbl_marathons) |>
+  tidy() |>
+  rename(pre_2020 = estimate1, post_2020 = estimate2)
+```
+
+Batter appearances until first score decreased by 27 after the rule change.
