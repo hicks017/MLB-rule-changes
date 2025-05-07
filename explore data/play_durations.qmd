@@ -198,7 +198,7 @@ Mean play duration decreased by 48 seconds after the implementation of the pitch
 
 ## Game duration
 
-Note: This is not using game start and end time but rather play time during a game.
+Note: This is not using game start and end time but rather play time during a game. Could be considered "action".
 
 ```{r}
 #| code-summary: Prepare data
