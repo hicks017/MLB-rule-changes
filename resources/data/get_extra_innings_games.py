@@ -107,6 +107,10 @@ async def fetch_game_details(session, game, semaphore):
             if rbi and batters_until_first_run is None:
                 batters_until_first_run = batters
                 break
+        # If no RBI was found (example: game ended on an error),
+        # set batters_until_first_run to the total number of batters faced.
+        if batters_until_first_run is None:
+            batters_until_first_run = batters
 
         # Teams & winner/loser
         home = data["gameData"]["teams"]["home"]["name"]

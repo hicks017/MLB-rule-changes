@@ -1,0 +1,224 @@
+---
+title: "Three batter minimum"
+author:
+  name: Christian Hicks
+  url: https://github.com/hicks017
+format:
+  html:
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    date: 2025-04-29
+    date-modified: last-modified
+description: Exploratory data analysis of the three batter minimum.
+editor: visual
+---
+
+## Setup
+
+```{r}
+#| code-summary: Packages
+#| message: false
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(broom)
+library(skimr)
+library(gtsummary)
+```
+
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Use a flexible route to the file path
+if (basename(getwd()) == "explore data") {
+  path <- "../resources/data"
+} else if (basename(getwd()) == "MLB-rule-changes") {
+  path <- "resources/data"
+} else {print("Failed to set path")}
+
+df_appearances <- read_csv(file.path(path, "pitcher_appearances.csv"))
+df_changes <- read_csv(file.path(path, "pitcher_changes.csv"))
+```
+
+## Pitching appearances
+
+```{r}
+#| code-summary: Prepare data
+
+# Change name for Cleveland to the Guardians
+df_appearances <- mutate(df_appearances, team_name = ifelse(
+  endsWith(team_name, "Indians"),
+  "Cleveland Guardians",
+  team_name
+))
+
+# Count pitching changes per game by year
+tbl_n_per_game_yearly <- 
+  df_appearances |>
+  group_by(game_id, year) |>
+  summarise(n = n(), .groups = "drop") |>
+  
+  # Add indication of rule change and change year to a factor
+  mutate(rule_change = ifelse(year < 2020, FALSE, TRUE)) |>
+  mutate(year = factor(year))
+```
+
+How many pitchers are teams using in a game over the years?
+
+With a three-batter minimum, the LOOGY and similar specialty roles should mostly be eliminated leading to fewer pitchers used in a game.
+
+```{r}
+# Plot pitchers per game per year
+ggplot(tbl_n_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Total pitchers per game by year")
+
+# Descriptive statistics
+skimr::skim(group_by(select(tbl_n_per_game_yearly, -game_id), year)) |> 
+  skimr::yank("numeric")
+
+# t test
+t.test(n ~ rule_change, data = tbl_n_per_game_yearly) |>
+  tidy() |>
+  rename(pre_2020 = estimate1, post_2020 = estimate2)
+```
+
+Number of pitchers used by both teams has increased since 2020, but the magnitude was small.
+
+## Mid-inning pitching changes
+
+How many pitching changes occurred during inning play in a game over the years?
+
+```{r}
+#| code-summary: Prepare data
+
+# Change name for Cleveland to the Guardians
+df_changes <- mutate(df_changes, team_name = ifelse(
+  endsWith(team_name, "Indians"),
+  "Cleveland Guardians",
+  team_name
+))
+
+# Count pitching changes per game by year
+tbl_changes_per_game_yearly <- 
+  df_changes |>
+  group_by(game_id, year) |>
+  summarise(n = n(), .groups = "drop") |>
+  
+  # Input games without a mid-inning pitching change
+  mutate(event = TRUE) |>
+  right_join(
+    df_appearances |> select(game_id, year) |> distinct(),
+    by = c("game_id", "year")
+  ) |>
+  mutate(n = ifelse(is.na(event), 0, n)) |>
+  select(-event) |>
+  
+  # Add indication of rule change and change year to a factor
+  mutate(rule_change = ifelse(year < 2020, FALSE, TRUE)) |>
+  mutate(year = factor(year))
+```
+
+A three-batter minimum means there's less opportunity to call in a pitcher for a single batter, which should decrease the number of pitching changes that occur in the middle of an inning.
+
+```{r}
+# Plot pitchers per game per year
+ggplot(tbl_changes_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  theme(axis.title.y = element_text(angle=0, vjust = 0.5)) +
+  ggtitle("Total mid-inning pitching changes per game by year")
+
+# Descriptive statistics
+skimr::skim(group_by(select(tbl_changes_per_game_yearly, -game_id), year)) |> 
+  skimr::yank("numeric")
+
+# t test
+t.test(n ~ rule_change, data = tbl_changes_per_game_yearly) |>
+  tidy() |>
+  rename(pre_2020 = estimate1, post_2020 = estimate2)
+```
+
+The number of mid-inning pitching changes decreased since 2020, but the magnitude was small.
+
+## Games with unscheduled pauses
+
+A mid-inning pitching change would add a pause in play that was not already scheduled, such as pauses in between innings.
+
+What proportion of games had these added pauses?
+
+### 1 or more pauses
+
+```{r}
+#| code-summary: Prepare data
+
+# Indicate games with n pauses
+tbl_changes_per_game_yearly <- mutate(
+  tbl_changes_per_game_yearly,
+  pause_01 = ifelse(n > 0, TRUE, FALSE),
+  pause_02 = ifelse(n > 1, TRUE, FALSE),
+  pause_03 = ifelse(n > 2, TRUE, FALSE)
+)
+
+# Summarize by year
+skimr::skim(select(group_by(tbl_changes_per_game_yearly, year), pause_01, year)) |>
+  skimr::yank("logical")
+
+# Test result by rule change
+gtsummary::tbl_summary(
+  data = tbl_changes_per_game_yearly,
+  include = pause_01,
+  by = rule_change
+) |>
+  gtsummary::  modify_spanning_header(all_stat_cols() ~ "**Rule change**") |>
+  gtsummary::add_p()
+```
+
+There was a -1% change in games with any added pauses in play due to mid-inning pitching changes.
+
+### 2 or more pauses
+
+```{r}
+# Summarize by year
+skimr::skim(select(group_by(tbl_changes_per_game_yearly, year), pause_02, year)) |>
+  skimr::yank("logical")
+
+# Test result by rule change
+gtsummary::tbl_summary(
+  data = tbl_changes_per_game_yearly,
+  include = pause_02,
+  by = rule_change
+) |>
+  gtsummary::  modify_spanning_header(all_stat_cols() ~ "**Rule change**") |>
+  gtsummary::add_p()
+```
+
+There was a -3% change in games with more than 2 added pauses in play due to mid-inning pitching changes.
+
+### 3 or more pauses
+
+```{r}
+# Summarize by year
+skimr::skim(select(group_by(tbl_changes_per_game_yearly, year), pause_03, year)) |>
+  skimr::yank("logical")
+
+# Test result by rule change
+gtsummary::tbl_summary(
+  data = tbl_changes_per_game_yearly,
+  include = pause_03,
+  by = rule_change
+) |>
+  gtsummary::  modify_spanning_header(all_stat_cols() ~ "**Rule change**") |>
+  gtsummary::add_p()
+```
+
+There was a -4% change in games with more than 3 added pauses in play due to mid-inning pitching changes.
+
+**Overall conclusion:** Although reductions of games with added pauses are statistically significant and of greater magnitude as the minimum threshold increases, the real-world impact is likely small.
+
+Note: Could just show `pause_01` through `pause_03` on same table.
