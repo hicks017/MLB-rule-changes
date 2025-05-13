@@ -1,0 +1,147 @@
+---
+title: "Designated Hitter"
+author:
+  name: Christian Hicks
+  url: https://github.com/hicks017
+format:
+  html:
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    date: 2025-05-04
+    date-modified: last-modified
+description: Exploratory data analysis of universal designated hitter.
+editor: visual
+---
+
+## Setup
+
+```{r}
+#| code-summary: Packages
+#| message: false
+
+library(readr)
+library(dplyr)
+library(skimr)
+library(ggplot2)
+library(broom)
+```
+
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Use a flexible route to the file path
+if (basename(getwd()) == "explore data") {
+  path <- "../resources/data"
+} else if (basename(getwd()) == "MLB-rule-changes") {
+  path <- "resources/data"
+} else {print("Failed to set path")}
+
+df_ops <- read_csv(file.path(path, "nl_ops.csv"))
+```
+
+Note that the fetch data scripts only saved stats for the home team when the home team was a National League member. This was due to simplifying the script to fetch data.
+
+## At bats
+
+```{r}
+#| code-summary: Prepare data
+
+# Change year to factor
+df_ops <- mutate(df_ops, year = factor(year))
+
+```
+
+How many at bats was the pitcher position getting in a game over the years?
+
+```{r}
+
+# Summarize by year
+df_ops |>
+  select(year, position, AB) |>
+  group_by(year, position) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(df_ops, aes(x = year, y = AB, fill = position)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  scale_y_continuous(breaks = seq(0, 9, by = 1)) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(angle=0, vjust = 0.5)
+  ) +
+  ggtitle("Total at bats by position per game by year")
+
+# t test
+t.test(AB ~ position, data = df_ops) |>
+  tidy() |>
+  rename(DH_hits = estimate1, pitchers_hit = estimate2)
+```
+
+Number of at bats were greater by nearly 2 for the DH position during rule change years versus the pitcher position without the rule change.
+
+This tracks with reality because without the rule change, many NL teams might let their starting pitcher swing once so they can stay in the game longer. After the starting pitcher was removed from the game, relief pitchers often would get replaced by a DH when it was their turn for an at bat. This led to the pitcher position not taking many at bats in a game. One caveat though was that the DH had to be replaced by a new pitcher, meaning NL teams may have burned through their bench quicker before the rule change.
+
+After the rule change, the DH position could remain the same player the entire game regardless of pitching changes.
+
+## On base percentage
+
+How did the OBP of pitchers before the rule change compare to the DH position during the rule change?
+
+```{r}
+# Summarize by year
+df_ops |>
+  select(year, position, OBP) |>
+  group_by(year, position) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(df_ops, aes(x = year, y = OBP, fill = position)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(angle=0, vjust = 0.5)
+  ) +
+  ggtitle("On base percentage by position per game by year")
+
+# t test
+t.test(OBP ~ position, data = df_ops) |>
+  tidy() |>
+  rename(DH_hit = estimate1, pitchers_hit = estimate2)
+```
+
+OBP was more than double for the DH compared to pitchers. Median OBP for pitchers was 0.00 before the rule change. The mean has potential for largely being skewed by pitchers who went 1-1 and were replaced by a DH before their second at bat.
+
+## On base plus slugging
+
+```{r}
+# Summarize by year
+df_ops |>
+  select(year, position, OPS) |>
+  group_by(year, position) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(df_ops, aes(x = year, y = OPS, fill = position)) +
+  geom_boxplot(outlier.alpha = 0.2) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(angle=0, vjust = 0.5)
+  ) +
+  ggtitle("OPS by position per game by year")
+
+# t test
+t.test(OPS ~ position, data = df_ops) |>
+  tidy() |>
+  rename(DH_hit = estimate1, pitchers_hit = estimate2)
+```
+
+OPS combines on base percentage and slugging (related to number of bases gained during a hit).
+
+Again, the DH position has nearly double the OPS of the pitchers. The OPS statistic probably amplifies the offensive production of the DH over pitchers since pitchers don't focus on increasing baserunning speed as much as position players.

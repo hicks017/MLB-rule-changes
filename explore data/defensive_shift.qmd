@@ -1,0 +1,127 @@
+---
+title: "The Shift"
+author:
+  name: Christian Hicks
+  url: https://github.com/hicks017
+format:
+  html:
+    embed-resources: true
+    df-print: kable
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    date: 2025-05-06
+    date-modified: last-modified
+description: Exploratory data analysis of the limitations set on defensive shifting.
+editor: visual
+---
+
+## Setup
+
+```{r}
+#| code-summary: Packages
+#| message: false
+
+library(readr)
+library(dplyr)
+library(skimr)
+library(ggplot2)
+library(broom)
+library(gtsummary)
+```
+
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Use a flexible route to the file path
+if (basename(getwd()) == "explore data") {
+  path <- "../resources/data"
+} else if (basename(getwd()) == "MLB-rule-changes") {
+  path <- "resources/data"
+} else {print("Failed to set path")}
+
+df_babip <- read_csv(file.path(path, "team_babip.csv"))
+df_pull <- read_csv(file.path(path, "pull_side_outcomes.csv"))
+```
+
+## BABIP
+
+```{r}
+#| code-summary: Prepare data
+
+# Change name for Cleveland to the Guardians
+df_babip <- mutate(
+  df_babip,
+  team_name = ifelse(
+    endsWith(team_name, "Indians"),
+    "Cleveland Guardians",
+    team_name
+  )
+)
+
+# Indicate rule change year
+df_babip <- mutate(
+  df_babip,
+  rule_change = ifelse(season < 2022, FALSE, TRUE),
+  season = factor(season)
+)
+```
+
+Was team BABIP affected after the defensive shift was banned?
+
+```{r}
+
+# Summarize by season
+df_babip |>
+  select(season, babip) |>
+  group_by(season) |>
+  skimr::skim() |>
+  skimr::yank("numeric")
+
+# Visualize
+ggplot(df_babip, aes(x = season, y = babip, fill = rule_change)) +
+  geom_boxplot() +
+  scale_y_continuous(limits = c(0, 0.4)) +
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(angle=0, vjust = 0.5)
+  ) +
+  ggtitle("Team BABIP by season")
+
+# t test
+t.test(babip ~ rule_change, data = df_babip) |>
+  tidy() |>
+  rename(pre_2022 = estimate1, post_2022 = estimate2)
+```
+
+There was a very small decrease (0.004) in team BABIP after the defensive shift was banned.
+
+## Pull side outcomes
+
+```{r}
+#| code-summary: Prepare data
+
+df_pull <- mutate(
+  df_pull,
+  rule_change = ifelse(season < 2022, FALSE, TRUE)
+)
+
+```
+
+Were pull side outcomes of at bats affected after the defensive shift was banned?
+
+```{r}
+
+# Summarize by year
+gtsummary::tbl_summary(
+  data = filter(df_pull, play_outcome != "unknown"), # 3 plays were unknown
+  by = rule_change,
+  include = play_outcome
+) |>
+  gtsummary::add_p()
+```
+
+There was a very small increase (0.3%) in hits after the defensive shift ban, that was accompanied by a small decrease (0.2%) in errors. Out occurrence saw the least change.
+
+Note: A limitation is that there is no simple way to fetch data on plays where the defensive shift formation was indicated. If that data existed then we could remove plays from this analysis where the defensive shift was not used. Therefore, the results here may be affected by the noise of plays that did not have a defensive shift involved.
