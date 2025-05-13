@@ -3130,6 +3130,49 @@ vertical-align: -.125em;
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<p><strong>Notes</strong></p>
+<p>Observation window</p>
+<ul>
+<li><p>2014-2024</p></li>
+<li><p>Used year of implementation for each rule to determine pre-rule and post-rule windows</p></li>
+<li><p>Regular season games only</p></li>
+<li><p>MLB teams only; No minor leagues</p></li>
+<li><p>2020 including when using within-game metrics, excluded when using season-long metrics</p></li>
+</ul>
+<p>Granularity of data</p>
+<ul>
+<li>Game-level, inning-level, individual plays, and season-long as needed per metric.</li>
+</ul>
+<p>Sources</p>
+<ul>
+<li>MLB Stats API for all data</li>
+</ul>
+<p>Outcomes</p>
+<ul>
+<li><p>3-batter minimum: Number of pitchers used per game, number of pitching changes in the middle of an inning per game, proportion of games with at least one/two/three mid-inning pitching changes</p></li>
+<li><p>Extra-innings baserunner: Number of extra innings required to complete a tied game at the 9th inning, number of runs scored during extra innings, number of batters needed before first run in extra innings, final inning in marathon games, total runs in marathon games, batters until first score in marathon games (marathons being those in the 95th percentile of game length by innings per season)</p></li>
+<li><p>Universal designated hitter: Number of at-bats by pitcher position during pre-rule window versus number by DH position during post-rule window, on base percentage of pitcher position during pre-rule window versus percentage of DH position during post-rule window, and on-base-plus-slugging with same comparison</p></li>
+<li><p>Base stealing / bigger bases / pitcher disengagement policy: Number of attempted steals by teams per season, success rate of steals by teams per season</p></li>
+<li><p>Pitch clock and play duration: Length of individual plays, combined game duration (action time, excluding non-play time)</p></li>
+<li><p>Defensive shift ban: Team BABIP stat across seasons, outcome of plays (hit, out, etc) when batter makes pull-side contact</p></li>
+</ul>
+<p>Statistical analysis</p>
+<ul>
+<li><p>Summarize each metric with mean (SD), median (IQR), and range.</p></li>
+<li><p>Pre/post comparisons with two-sample t-tests (not paired because too many variables change such as players, coaches, schedules, weather). 95% confidence intervals for differences in means or proportions.</p></li>
+<li><p>Exclusion of 2020 year when shortened season would affect team statistics.</p></li>
+</ul>
+<p>Software and reproducibility</p>
+<ul>
+<li><p>Python version 3.11.6</p></li>
+<li><p>R version 4.4.3</p></li>
+<li><p>Version control stored on GitHub repository containing all scripts and Docker files</p></li>
+</ul>
+<p>Data licensing</p>
+<ul>
+<li><p>All data are publicacly available via the free MLB Stats API</p></li>
+<li><p>No personal player data or personally identifiable information were used</p></li>
+</ul>
 </section>
 <section id="references" class="level2 unnumbered">
 
