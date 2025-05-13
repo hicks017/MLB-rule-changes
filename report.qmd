@@ -26,4 +26,6 @@ In 2023, MLB continued the offensive and safety initiatives. Bases were increase
 
 While each of these rule changes intends to improve the MLB viewing experiences, their real-world effects require systematic and independent quantification. This analysis leverages publicly available pitch-by-pitch, play-by-play, and other game day datasets to measure key metrics before and after each rule's implementation. Comparing metrics with pre- and post-rule windows aims to provide empirical evidence on the efficacy of MLB's recent innovations and inform future decision-making in professional baseball.
 
+## Methods
+
 ## References
