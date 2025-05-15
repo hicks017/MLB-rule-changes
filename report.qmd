@@ -28,7 +28,7 @@ While each of these rule changes intends to improve the MLB viewing experiences,
 
 ## Methods
 
-**Study Period**
+### Study Period
 
 This was a retrospective, observational study of MLB rule changes that were implemented during the 2020-2023 seasons. Only MLB regular-season games were included. Minor league games and postseason matchups were excluded.
 
@@ -36,7 +36,7 @@ For each studied rule, the year of implementation defined the boundary between p
 
 The 2020 season was a short season due to the COVID-19 pandemic. Therefore this season was included when analyzing within-game metrics and excluded from season-aggregated metrics.
 
-**Outcomes**
+### Outcomes
 
 Various metrics tailored to each rule change were investigated to perform a robust analysis. These metrics are described alongside the respective rule change in TABLE X.
 
@@ -80,7 +80,7 @@ Various metrics tailored to each rule change were investigated to perform a robu
 |                                                                               | -   Outcome of plays (hit, out, etc) when batter makes pull-side contact              |
 +-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 
-## Statistical analysis
+### Statistical analysis
 
 -   Summarize each metric with mean (SD), median (IQR), and range.
 
@@ -88,7 +88,7 @@ Various metrics tailored to each rule change were investigated to perform a robu
 
 -   Exclusion of 2020 year when shortened season would affect team statistics.
 
-**Software, reproducibility, and data licensing**
+### Software, reproducibility, and data licensing
 
 All data-retrieval and preprocessing was executed using Python 3.11.6. The exploration and final analysis were written with R 4.4.3 within a lightweight Docker container. Versioned scripts and written reports were saved on a public GitHub repository to ensure transparency.
 

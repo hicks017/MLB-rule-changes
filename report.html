@@ -3073,8 +3073,13 @@ vertical-align: -.125em;
    
   <ul>
   <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">Background</a></li>
-  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#study-period" id="toc-study-period" class="nav-link" data-scroll-target="#study-period">Study Period</a></li>
+  <li><a href="#outcomes" id="toc-outcomes" class="nav-link" data-scroll-target="#outcomes">Outcomes</a></li>
   <li><a href="#statistical-analysis" id="toc-statistical-analysis" class="nav-link" data-scroll-target="#statistical-analysis">Statistical analysis</a></li>
+  <li><a href="#software-reproducibility-and-data-licensing" id="toc-software-reproducibility-and-data-licensing" class="nav-link" data-scroll-target="#software-reproducibility-and-data-licensing">Software, reproducibility, and data licensing</a></li>
+  </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -3131,11 +3136,14 @@ vertical-align: -.125em;
 </section>
 <section id="methods" class="level2">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p><strong>Study Period</strong></p>
+<section id="study-period" class="level3">
+<h3 class="anchored" data-anchor-id="study-period">Study Period</h3>
 <p>This was a retrospective, observational study of MLB rule changes that were implemented during the 2020-2023 seasons. Only MLB regular-season games were included. Minor league games and postseason matchups were excluded.</p>
 <p>For each studied rule, the year of implementation defined the boundary between pre-rule and post-rule windows. All seasons prior to implementation, through the start of the 2014 regular season, comprised of the pre-rule window. All seasons from implementation and onward, through the end of the 2024 regular season, comprised of the post-rule period.</p>
 <p>The 2020 season was a short season due to the COVID-19 pandemic. Therefore this season was included when analyzing within-game metrics and excluded from season-aggregated metrics.</p>
-<p><strong>Outcomes</strong></p>
+</section>
+<section id="outcomes" class="level3">
+<h3 class="anchored" data-anchor-id="outcomes">Outcomes</h3>
 <p>Various metrics tailored to each rule change were investigated to perform a robust analysis. These metrics are described alongside the respective rule change in TABLE X.</p>
 <table class="caption-top table">
 <colgroup>
@@ -3200,16 +3208,19 @@ vertical-align: -.125em;
 </tbody>
 </table>
 </section>
-<section id="statistical-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="statistical-analysis">Statistical analysis</h2>
+<section id="statistical-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-analysis">Statistical analysis</h3>
 <ul>
 <li><p>Summarize each metric with mean (SD), median (IQR), and range.</p></li>
 <li><p>Pre/post comparisons with two-sample t-tests (not paired because too many variables change such as players, coaches, schedules, weather). 95% confidence intervals for differences in means or proportions.</p></li>
 <li><p>Exclusion of 2020 year when shortened season would affect team statistics.</p></li>
 </ul>
-<p><strong>Software, reproducibility, and data licensing</strong></p>
+</section>
+<section id="software-reproducibility-and-data-licensing" class="level3">
+<h3 class="anchored" data-anchor-id="software-reproducibility-and-data-licensing">Software, reproducibility, and data licensing</h3>
 <p>All data-retrieval and preprocessing was executed using Python 3.11.6. The exploration and final analysis were written with R 4.4.3 within a lightweight Docker container. Versioned scripts and written reports were saved on a public GitHub repository to ensure transparency.</p>
 <p>Raw data originated from the free, official MLB Stats API. No personal player data or personally identifiable information were used.</p>
+</section>
 </section>
 <section id="references" class="level2 unnumbered">
 
