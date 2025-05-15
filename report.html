@@ -3074,6 +3074,7 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">Background</a></li>
   <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#statistical-analysis" id="toc-statistical-analysis" class="nav-link" data-scroll-target="#statistical-analysis">Statistical analysis</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
 </nav>
@@ -3111,7 +3112,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 13, 2025</p>
+      <p class="date-modified">May 15, 2025</p>
     </div>
   </div>
     
@@ -3136,16 +3137,71 @@ vertical-align: -.125em;
 <p>The 2020 season was a short season due to the COVID-19 pandemic. Therefore this season was included when analyzing within-game metrics and excluded from season-aggregated metrics.</p>
 <p><strong>Outcomes</strong></p>
 <p>Various metrics tailored to each rule change were investigated to perform a robust analysis. These metrics are described alongside the respective rule change in TABLE X.</p>
-<p>TABLE X</p>
-<ul>
-<li><p>3-batter minimum: Number of pitchers used per game, number of pitching changes in the middle of an inning per game, proportion of games with at least one/two/three mid-inning pitching changes</p></li>
-<li><p>Extra-innings baserunner: Number of extra innings required to complete a tied game at the 9th inning, number of runs scored during extra innings, number of batters needed before first run in extra innings, final inning in marathon games, total runs in marathon games, batters until first score in marathon games (marathons being those in the 95th percentile of game length by innings per season)</p></li>
-<li><p>Universal designated hitter: Number of at-bats by pitcher position during pre-rule window versus number by DH position during post-rule window, on base percentage of pitcher position during pre-rule window versus percentage of DH position during post-rule window, and on-base-plus-slugging with same comparison</p></li>
-<li><p>Base stealing / bigger bases / pitcher disengagement policy: Number of attempted steals by teams per season, success rate of steals by teams per season</p></li>
-<li><p>Pitch clock and play duration: Length of individual plays, combined game duration (action time, excluding non-play time)</p></li>
-<li><p>Defensive shift ban: Team BABIP stat across seasons, outcome of plays (hit, out, etc) when batter makes pull-side contact</p></li>
-</ul>
-<p>Statistical analysis</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 47%">
+<col style="width: 52%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Rule change</th>
+<th>Outcomes to compare pre/post</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3-batter minimum</td>
+<td><ul>
+<li><p>Number of pitchers used per game</p></li>
+<li><p>Number of pitching changes in the middle of an inning per game</p></li>
+<li><p>Proportion of games with at least one, two, and three mid-inning pitching changes</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>Extra-innings baserunner</td>
+<td><ul>
+<li><p>Number of extra innings required to complete a tied game at the 9th inning</p></li>
+<li><p>Number of runs scored during extra innings</p></li>
+<li><p>Number of batters needed before first run in extra innings</p></li>
+<li><p>Final inning in marathon games</p></li>
+<li><p>Total runs in marathon games</p></li>
+<li><p>Batters until first score in marathon games</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>Universal designated hitter</td>
+<td><ul>
+<li><p>Number of at-bats by pitcher position versus DH position</p></li>
+<li><p>On base percentage of pitcher position versus DH position</p></li>
+<li><p>On-base-plus-slugging of pitcher position versus DH position</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>Base stealing encouragements (bigger basements, pitcher disengagement policy)</td>
+<td><ul>
+<li><p>Number of attempted steals by teams per season</p></li>
+<li><p>Success rate of steals by teams per season</p></li>
+</ul></td>
+</tr>
+<tr class="odd">
+<td>Pitch clock</td>
+<td><ul>
+<li><p>Length of individual plays</p></li>
+<li><p>Combined game duration (action time, excluding non-play time)</p></li>
+</ul></td>
+</tr>
+<tr class="even">
+<td>Defensive shift ban</td>
+<td><ul>
+<li><p>Team BABIP stat across seasons</p></li>
+<li><p>Outcome of plays (hit, out, etc) when batter makes pull-side contact</p></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="statistical-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="statistical-analysis">Statistical analysis</h2>
 <ul>
 <li><p>Summarize each metric with mean (SD), median (IQR), and range.</p></li>
 <li><p>Pre/post comparisons with two-sample t-tests (not paired because too many variables change such as players, coaches, schedules, weather). 95% confidence intervals for differences in means or proportions.</p></li>

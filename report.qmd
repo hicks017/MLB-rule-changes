@@ -40,21 +40,47 @@ The 2020 season was a short season due to the COVID-19 pandemic. Therefore this 
 
 Various metrics tailored to each rule change were investigated to perform a robust analysis. These metrics are described alongside the respective rule change in TABLE X.
 
-TABLE X
++-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Rule change                                                                   | Outcomes to compare pre/post                                                          |
++===============================================================================+=======================================================================================+
+| 3-batter minimum                                                              | -   Number of pitchers used per game                                                  |
+|                                                                               |                                                                                       |
+|                                                                               | -   Number of pitching changes in the middle of an inning per game                    |
+|                                                                               |                                                                                       |
+|                                                                               | -   Proportion of games with at least one, two, and three mid-inning pitching changes |
++-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Extra-innings baserunner                                                      | -   Number of extra innings required to complete a tied game at the 9th inning        |
+|                                                                               |                                                                                       |
+|                                                                               | -   Number of runs scored during extra innings                                        |
+|                                                                               |                                                                                       |
+|                                                                               | -   Number of batters needed before first run in extra innings                        |
+|                                                                               |                                                                                       |
+|                                                                               | -   Final inning in marathon games                                                    |
+|                                                                               |                                                                                       |
+|                                                                               | -   Total runs in marathon games                                                      |
+|                                                                               |                                                                                       |
+|                                                                               | -   Batters until first score in marathon games                                       |
++-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Universal designated hitter                                                   | -   Number of at-bats by pitcher position versus DH position                          |
+|                                                                               |                                                                                       |
+|                                                                               | -   On base percentage of pitcher position versus DH position                         |
+|                                                                               |                                                                                       |
+|                                                                               | -   On-base-plus-slugging of pitcher position versus DH position                      |
++-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Base stealing encouragements (bigger basements, pitcher disengagement policy) | -   Number of attempted steals by teams per season                                    |
+|                                                                               |                                                                                       |
+|                                                                               | -   Success rate of steals by teams per season                                        |
++-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Pitch clock                                                                   | -   Length of individual plays                                                        |
+|                                                                               |                                                                                       |
+|                                                                               | -   Combined game duration (action time, excluding non-play time)                     |
++-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
+| Defensive shift ban                                                           | -   Team BABIP stat across seasons                                                    |
+|                                                                               |                                                                                       |
+|                                                                               | -   Outcome of plays (hit, out, etc) when batter makes pull-side contact              |
++-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 
--   3-batter minimum: Number of pitchers used per game, number of pitching changes in the middle of an inning per game, proportion of games with at least one/two/three mid-inning pitching changes
-
--   Extra-innings baserunner: Number of extra innings required to complete a tied game at the 9th inning, number of runs scored during extra innings, number of batters needed before first run in extra innings, final inning in marathon games, total runs in marathon games, batters until first score in marathon games (marathons being those in the 95th percentile of game length by innings per season)
-
--   Universal designated hitter: Number of at-bats by pitcher position during pre-rule window versus number by DH position during post-rule window, on base percentage of pitcher position during pre-rule window versus percentage of DH position during post-rule window, and on-base-plus-slugging with same comparison
-
--   Base stealing / bigger bases / pitcher disengagement policy: Number of attempted steals by teams per season, success rate of steals by teams per season
-
--   Pitch clock and play duration: Length of individual plays, combined game duration (action time, excluding non-play time)
-
--   Defensive shift ban: Team BABIP stat across seasons, outcome of plays (hit, out, etc) when batter makes pull-side contact
-
-Statistical analysis
+## Statistical analysis
 
 -   Summarize each metric with mean (SD), median (IQR), and range.
 
