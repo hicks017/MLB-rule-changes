@@ -38,7 +38,7 @@ The 2020 season was a short season due to the COVID-19 pandemic. Therefore this 
 
 ### Outcomes
 
-Various metrics tailored to each rule change were investigated to perform a robust analysis. These metrics are described alongside the respective rule change in TABLE X.
+Various metrics tailored to each rule change were investigated to perform a robust analysis. These metrics are described alongside the respective rule changes below.
 
 +-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 | Rule change                                                                   | Outcomes to compare pre/post                                                          |
@@ -80,7 +80,7 @@ Various metrics tailored to each rule change were investigated to perform a robu
 |                                                                               | -   Outcome of plays (hit, out, etc) when batter makes pull-side contact              |
 +-------------------------------------------------------------------------------+---------------------------------------------------------------------------------------+
 
-### Statistical analysis
+### WIP Statistical analysis
 
 -   Summarize each metric with mean (SD), median (IQR), and range.
 
@@ -88,10 +88,87 @@ Various metrics tailored to each rule change were investigated to perform a robu
 
 -   Exclusion of 2020 year when shortened season would affect team statistics.
 
-### Software, reproducibility, and data licensing
+### WIP Software, reproducibility, and data licensing
 
 All data-retrieval and preprocessing was executed using Python 3.11.6. The exploration and final analysis were written with R 4.4.3 within a lightweight Docker container. Versioned scripts and written reports were saved on a public GitHub repository to ensure transparency.
 
 Raw data originated from the free, official MLB Stats API. No personal player data or personally identifiable information were used.
+
+```{r}
+#| code-summary: Packages
+#| message: false
+
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(broom)
+library(skimr)
+library(gtsummary)
+
+# Use a flexible route to the data file path
+if (basename(getwd()) == "explore data") {
+  path <- "../resources/data"
+} else if (basename(getwd()) == "MLB-rule-changes") {
+  path <- "resources/data"
+} else {print("Failed to set path")}
+```
+
+## Results
+
+### 3-batter minimum
+
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Get pitcher appearances and changes
+df_appearances <- read_csv(file.path(path, "pitcher_appearances.csv"))
+df_changes <- read_csv(file.path(path, "pitcher_changes.csv"))
+
+# Change name for Cleveland to the Guardians
+df_appearances <- mutate(df_appearances, team_name = ifelse(
+  endsWith(team_name, "Indians"),
+  "Cleveland Guardians",
+  team_name
+))
+
+# Count pitching changes per game by year
+tbl_n_per_game_yearly <- 
+  df_appearances |>
+  group_by(game_id, year) |>
+  summarise(n = n(), .groups = "drop") |>
+  
+  # Add indication of rule change and change year to a factor
+  mutate(rule_change = ifelse(year < 2020, FALSE, TRUE)) |>
+  mutate(year = factor(year))
+```
+
+```{r}
+#| code-summary: Test
+
+# t test with factorization to define difference direction
+ttest_pitching_changes <- 
+  tbl_n_per_game_yearly |>
+  mutate(rule_change = factor(rule_change, levels = c("TRUE", "FALSE"))) |>
+  t.test(n ~ rule_change, data = _)
+```
+
+```{r}
+#| include: false
+
+# Environemnt variables for pitching change t tests
+ttest_pitching_change_estimate <- unname(round(
+  ttest_pitching_changes[["estimate"]][1] - ttest_pitching_changes[["estimate"]][2],
+  1
+))
+
+ttest_pitching_change_ci <- sprintf(
+  '%.2f - %.2f',
+  ttest_pitching_changes[['conf.int']][1],
+  ttest_pitching_changes[['conf.int']][2]
+)
+```
+
+With a three-batter minimum, the Left-handed One-Out Guy (LOOGY) and other specialty roles were mostly eliminated. Fewer short-term pitchers should have led to fewer pitchers used in a game, though this change is barely noticeable throughout each season. In fact, there was a very slight increase. The mean number of pitchers used per game was `r ttest_pitching_change_estimate` higher after the 2020 rule change (95% CI: `r ttest_pitching_change_ci`).
 
 ## References

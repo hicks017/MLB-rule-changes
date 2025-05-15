@@ -23,6 +23,40 @@ width: 0.8em;
 margin: 0 0.8em 0.2em -1em;  vertical-align: middle;
 }
 
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+}
+pre.numberSource { margin-left: 3em; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+
 div.csl-bib-body { }
 div.csl-entry {
 clear: both;
@@ -3077,8 +3111,12 @@ vertical-align: -.125em;
   <ul class="collapse">
   <li><a href="#study-period" id="toc-study-period" class="nav-link" data-scroll-target="#study-period">Study Period</a></li>
   <li><a href="#outcomes" id="toc-outcomes" class="nav-link" data-scroll-target="#outcomes">Outcomes</a></li>
-  <li><a href="#statistical-analysis" id="toc-statistical-analysis" class="nav-link" data-scroll-target="#statistical-analysis">Statistical analysis</a></li>
-  <li><a href="#software-reproducibility-and-data-licensing" id="toc-software-reproducibility-and-data-licensing" class="nav-link" data-scroll-target="#software-reproducibility-and-data-licensing">Software, reproducibility, and data licensing</a></li>
+  <li><a href="#wip-statistical-analysis" id="toc-wip-statistical-analysis" class="nav-link" data-scroll-target="#wip-statistical-analysis">WIP Statistical analysis</a></li>
+  <li><a href="#wip-software-reproducibility-and-data-licensing" id="toc-wip-software-reproducibility-and-data-licensing" class="nav-link" data-scroll-target="#wip-software-reproducibility-and-data-licensing">WIP Software, reproducibility, and data licensing</a></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
+  <ul class="collapse">
+  <li><a href="#batter-minimum" id="toc-batter-minimum" class="nav-link" data-scroll-target="#batter-minimum">3-batter minimum</a></li>
   </ul></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -3144,7 +3182,7 @@ vertical-align: -.125em;
 </section>
 <section id="outcomes" class="level3">
 <h3 class="anchored" data-anchor-id="outcomes">Outcomes</h3>
-<p>Various metrics tailored to each rule change were investigated to perform a robust analysis. These metrics are described alongside the respective rule change in TABLE X.</p>
+<p>Various metrics tailored to each rule change were investigated to perform a robust analysis. These metrics are described alongside the respective rule changes below.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 47%">
@@ -3208,18 +3246,78 @@ vertical-align: -.125em;
 </tbody>
 </table>
 </section>
-<section id="statistical-analysis" class="level3">
-<h3 class="anchored" data-anchor-id="statistical-analysis">Statistical analysis</h3>
+<section id="wip-statistical-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="wip-statistical-analysis">WIP Statistical analysis</h3>
 <ul>
 <li><p>Summarize each metric with mean (SD), median (IQR), and range.</p></li>
 <li><p>Pre/post comparisons with two-sample t-tests (not paired because too many variables change such as players, coaches, schedules, weather). 95% confidence intervals for differences in means or proportions.</p></li>
 <li><p>Exclusion of 2020 year when shortened season would affect team statistics.</p></li>
 </ul>
 </section>
-<section id="software-reproducibility-and-data-licensing" class="level3">
-<h3 class="anchored" data-anchor-id="software-reproducibility-and-data-licensing">Software, reproducibility, and data licensing</h3>
+<section id="wip-software-reproducibility-and-data-licensing" class="level3">
+<h3 class="anchored" data-anchor-id="wip-software-reproducibility-and-data-licensing">WIP Software, reproducibility, and data licensing</h3>
 <p>All data-retrieval and preprocessing was executed using Python 3.11.6. The exploration and final analysis were written with R 4.4.3 within a lightweight Docker container. Versioned scripts and written reports were saved on a public GitHub repository to ensure transparency.</p>
 <p>Raw data originated from the free, official MLB Stats API. No personal player data or personally identifiable information were used.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Packages</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(skimr)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gtsummary)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Use a flexible route to the data file path</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">basename</span>(<span class="fu">getwd</span>()) <span class="sc">==</span> <span class="st">&quot;explore data&quot;</span>) {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  path <span class="ot">&lt;-</span> <span class="st">&quot;../resources/data&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> <span class="cf">if</span> (<span class="fu">basename</span>(<span class="fu">getwd</span>()) <span class="sc">==</span> <span class="st">&quot;MLB-rule-changes&quot;</span>) {</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  path <span class="ot">&lt;-</span> <span class="st">&quot;resources/data&quot;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {<span class="fu">print</span>(<span class="st">&quot;Failed to set path&quot;</span>)}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="results" class="level2">
+<h2 class="anchored" data-anchor-id="results">Results</h2>
+<section id="batter-minimum" class="level3">
+<h3 class="anchored" data-anchor-id="batter-minimum">3-batter minimum</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Data</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get pitcher appearances and changes</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>df_appearances <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">file.path</span>(path, <span class="st">&quot;pitcher_appearances.csv&quot;</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>df_changes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">file.path</span>(path, <span class="st">&quot;pitcher_changes.csv&quot;</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Change name for Cleveland to the Guardians</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>df_appearances <span class="ot">&lt;-</span> <span class="fu">mutate</span>(df_appearances, <span class="at">team_name =</span> <span class="fu">ifelse</span>(</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">endsWith</span>(team_name, <span class="st">&quot;Indians&quot;</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Cleveland Guardians&quot;</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  team_name</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Count pitching changes per game by year</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>tbl_n_per_game_yearly <span class="ot">&lt;-</span> </span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  df_appearances <span class="sc">|&gt;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(game_id, year) <span class="sc">|&gt;</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Add indication of rule change and change year to a factor</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rule_change =</span> <span class="fu">ifelse</span>(year <span class="sc">&lt;</span> <span class="dv">2020</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">factor</span>(year))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Test</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># t test with factorization to define difference direction</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>ttest_pitching_changes <span class="ot">&lt;-</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  tbl_n_per_game_yearly <span class="sc">|&gt;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rule_change =</span> <span class="fu">factor</span>(rule_change, <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">&quot;TRUE&quot;</span>, <span class="st">&quot;FALSE&quot;</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(n <span class="sc">~</span> rule_change, <span class="at">data =</span> _)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>With a three-batter minimum, the Left-handed One-Out Guy (LOOGY) and other specialty roles were mostly eliminated. Fewer short-term pitchers should have led to fewer pitchers used in a game, though this change is barely noticeable throughout each season. In fact, there was a very slight increase. The mean number of pitchers used per game was 0.3 higher after the 2020 rule change (95% CI: 0.25 - 0.38).</p>
 </section>
 </section>
 <section id="references" class="level2 unnumbered">
