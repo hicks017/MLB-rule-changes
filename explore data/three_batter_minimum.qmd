@@ -198,7 +198,7 @@ gtsummary::tbl_summary(
   gtsummary::add_p()
 ```
 
-There was a -3% change in games with more than 2 added pauses in play due to mid-inning pitching changes.
+There was a -3% change in games with 2 or more added pauses in play due to mid-inning pitching changes.
 
 ### 3 or more pauses
 
@@ -217,7 +217,7 @@ gtsummary::tbl_summary(
   gtsummary::add_p()
 ```
 
-There was a -4% change in games with more than 3 added pauses in play due to mid-inning pitching changes.
+There was a -4% change in games with 3 or more added pauses in play due to mid-inning pitching changes.
 
 **Overall conclusion:** Although reductions of games with added pauses are statistically significant and of greater magnitude as the minimum threshold increases, the real-world impact is likely small.
 

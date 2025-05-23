@@ -100,6 +100,8 @@ Raw data originated from the free, official MLB Stats API. No personal player da
 
 library(readr)
 library(dplyr)
+library(tidyr)
+library(tibble)
 library(ggplot2)
 library(broom)
 library(skimr)
@@ -139,18 +141,17 @@ tbl_n_per_game_yearly <-
   summarise(n = n(), .groups = "drop") |>
   
   # Add indication of rule change and change year to a factor
-  mutate(rule_change = ifelse(year < 2020, FALSE, TRUE)) |>
-  mutate(year = factor(year))
+  mutate(
+    rule_change = factor(ifelse(year < 2020, FALSE, TRUE), levels = c("TRUE", "FALSE")),
+    year = factor(year)
+  )
 ```
 
 ```{r}
 #| code-summary: Test
 
 # t test with factorization to define difference direction
-ttest_pitching_changes <- 
-  tbl_n_per_game_yearly |>
-  mutate(rule_change = factor(rule_change, levels = c("TRUE", "FALSE"))) |>
-  t.test(n ~ rule_change, data = _)
+ttest_pitching_changes <- t.test(n ~ rule_change, data = tbl_n_per_game_yearly)
 ```
 
 ```{r}
@@ -163,12 +164,209 @@ ttest_pitching_change_estimate <- unname(round(
 ))
 
 ttest_pitching_change_ci <- sprintf(
-  '%.2f - %.2f',
+  '%.2f to %.2f',
   ttest_pitching_changes[['conf.int']][1],
   ttest_pitching_changes[['conf.int']][2]
 )
 ```
 
-With a three-batter minimum, the Left-handed One-Out Guy (LOOGY) and other specialty roles were mostly eliminated. Fewer short-term pitchers should have led to fewer pitchers used in a game, though this change is barely noticeable throughout each season. In fact, there was a very slight increase. The mean number of pitchers used per game was `r ttest_pitching_change_estimate` higher after the 2020 rule change (95% CI: `r ttest_pitching_change_ci`).
+With a three-batter minimum, the Left-handed One-Out Guy (LOOGY) and other specialty roles were mostly eliminated. Fewer short-term pitchers should have led to fewer pitchers used in a game, though the change was barely noticeable throughout each season (@fig-pitchers). In fact, there was a very slight increase. The mean number of pitchers used per game was `r ttest_pitching_change_estimate` higher after the 2020 rule change (95% CI: `r ttest_pitching_change_ci`. See @tbl-pitchers).
+
+```{r}
+#| code-summary: Plot
+#| fig-cap: Boxplot summary of pitcher appearances during games from years 2014-2024.
+#| label: fig-pitchers
+
+# Plot pitchers per game per year
+ggplot(tbl_n_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2, alpha = 0.75) +
+  scale_fill_manual(
+    values = c("FALSE" = "#EF3E42", "TRUE" = "#005A9C"),
+    labels = c("FALSE" = "No minimum", "TRUE" = "3-batter minimum")
+  ) +
+  scale_y_continuous(limits = c(0, 40), breaks = seq(0, 40, by = 10)) +
+  theme(
+    axis.title.y = element_text(angle=0, vjust = 0.5),
+    legend.title = element_blank(),
+    legend.position = "inside",
+    legend.position.inside = c(0.87, 0.91)
+  ) +
+  labs(
+    title = "Total pitchers per game by year",
+    x = "Year",
+    y = "Count"
+  )
+```
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Mean pitcher appearances by year.
+#| label: tbl-pitchers
+
+tbl_n_per_game_yearly |>
+  select(-rule_change) |>
+  tidyr::pivot_wider(id_cols = game_id, names_from = year, values_from = n) |>
+  gtsummary::tbl_summary(
+    include = -game_id,
+    missing = "no",
+    statistic = everything() ~ "{mean} ± {sd}"
+  ) |>
+  gtsummary::modify_header(label = "**Year**")
+```
+
+```{r}
+#| code-summary: Data
+
+# Change name for Cleveland to the Guardians
+df_changes <- mutate(df_changes, team_name = ifelse(
+  endsWith(team_name, "Indians"),
+  "Cleveland Guardians",
+  team_name
+))
+
+# Count pitching changes per game by year
+tbl_changes_per_game_yearly <- 
+  df_changes |>
+  group_by(game_id, year) |>
+  summarise(n = n(), .groups = "drop") |>
+  
+  # Input games without a mid-inning pitching change
+  mutate(event = TRUE) |>
+  right_join(
+    df_appearances |> select(game_id, year) |> distinct(),
+    by = c("game_id", "year")
+  ) |>
+  mutate(n = ifelse(is.na(event), 0, n)) |>
+  select(-event) |>
+  
+  # Add indication of rule change and change year to a factor
+  mutate(
+    rule_change = factor(ifelse(year < 2020, FALSE, TRUE), levels = c("TRUE", "FALSE")),
+    year = factor(year)
+  )
+```
+
+```{r}
+#| code-summary: Test
+
+# t test with factorization to define difference direction
+ttest_mid_changes <- t.test(n ~ rule_change, data = tbl_changes_per_game_yearly)
+```
+
+```{r}
+#| include: false
+
+# Environemnt variables for pitching change t tests
+ttest_mid_change_estimate <- unname(round(
+  ttest_mid_changes[["estimate"]][1] - ttest_mid_changes[["estimate"]][2],
+  1
+))
+
+ttest_mid_change_ci <- sprintf(
+  '%.2f to %.2f',
+  ttest_mid_changes[['conf.int']][1],
+  ttest_mid_changes[['conf.int']][2]
+)
+```
+
+A three-batter minimum should eliminate the opportunity to call in a pitcher for a single batter, which would decrease the number of pitching changes that occur in the middle of an inning. The number of mid-inning pitching changes decreased since 2020, but the magnitude was small (@fig-mid-inning). The mean number of mid-inning pitching changed by `r ttest_mid_change_estimate` after the 2020 rule change (95% CI: `r ttest_mid_change_ci`. See @tbl-mid-inning).
+
+```{r}
+#| code-summary: Plot
+#| fig-cap: Boxplot summary of mid-inning pitching changes during games from years 2014-2024.
+#| label: fig-mid-inning
+
+# Plot pitchers per game per year
+ggplot(tbl_changes_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
+  geom_boxplot(outlier.alpha = 0.2, alpha = 0.75) +
+  scale_fill_manual(
+    values = c("FALSE" = "#EF3E42", "TRUE" = "#005A9C"),
+    labels = c("FALSE" = "No minimum", "TRUE" = "3-batter minimum")
+  ) +
+  theme(
+    axis.title.y = element_text(angle=0, vjust = 0.5),
+    legend.title = element_blank(),
+    legend.position = "inside",
+    legend.position.inside = c(0.8, 0.91)
+  ) +
+  labs(
+    title = "Total mid-inning pitching changes per game by year",
+    x = "Year",
+    y = "Count"
+  )
+```
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Mean mid-inning pitching changes by year.
+#| label: tbl-mid-inning
+
+tbl_changes_per_game_yearly |>
+  select(-rule_change) |>
+  tidyr::pivot_wider(id_cols = game_id, names_from = year, values_from = n) |>
+  gtsummary::tbl_summary(
+    include = -game_id,
+    missing = "no",
+    statistic = everything() ~ "{mean} ± {sd}",
+    digits = everything() ~ 1
+  ) |>
+  gtsummary::modify_header(label = "**Year**")
+```
+
+```{r}
+#| code-summary: Data
+
+tbl_changes_per_game_yearly <- 
+  tbl_changes_per_game_yearly |>
+  mutate(
+  rule_change = factor(
+    ifelse(rule_change == TRUE, "3-batter minimum", "No minimum"),
+    levels = c("No minimum", "3-batter minimum")
+  ),
+  `1 pause` = ifelse(n > 0, TRUE, FALSE),
+  `≥2 pauses` = ifelse(n > 1, TRUE, FALSE),
+  `≥3 pauses` = ifelse(n > 2, TRUE, FALSE)
+)
+```
+
+```{r}
+#| include: false
+
+pauses <- 
+  
+  # Summarize various counts of mid-inning pauses by rule in place
+  tbl_changes_per_game_yearly |>
+  group_by(rule_change) |>
+  summarise(
+    pause_01 = mean(`1 pause`),
+    pause_02 = mean(`≥2 pauses`),
+    pause_03 = mean(`≥3 pauses`)
+  ) |>
+  
+  # Wrangle into a named list
+  tidyr::pivot_longer(cols = -rule_change) |>
+  tidyr::pivot_wider(names_from = rule_change, values_from = value) |>
+  mutate(diff = paste0(round((`3-batter minimum` - `No minimum`) * 100, 1), "%")) |>
+  select(name, diff) |>
+  tibble::deframe()
+```
+
+A mid-inning pitching change would add a pause in play that was not already scheduled, such as pauses in between innings. The differences in proportions of games with pauses in play due to mid-inning pitching changes were `r pauses[["pause_01"]]` for games with any added pauses, `r pauses[["pause_02"]]` for games with at least 2 pauses, and `r pauses[["pause_03"]]` for games with at least 3 pauses (See @tbl-pauses).
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Count and proportions of games with various numbers of pauses in play due to mid-inning pitching changes.
+#| label: tbl-pauses
+
+# Test result by rule change
+gtsummary::tbl_summary(
+  data = tbl_changes_per_game_yearly,
+  include = matches("pause(s)?$"),
+  by = rule_change
+) |>
+  gtsummary::modify_header(label = "**Mid-inning pauses**") |>
+  gtsummary::modify_spanning_header(all_stat_cols() ~ "**Rule in place**") |>
+  gtsummary::add_p()
+```
 
 ## References
