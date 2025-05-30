@@ -145,6 +145,10 @@ tbl_n_per_game_yearly <-
     rule_change = factor(ifelse(year < 2020, FALSE, TRUE), levels = c("TRUE", "FALSE")),
     year = factor(year)
   )
+
+# Define colors for plots
+dodger_red <- "#EF3E42"
+dodger_blue <- "#005A9C"
 ```
 
 ```{r}
@@ -181,7 +185,7 @@ With a three-batter minimum, the Left-handed One-Out Guy (LOOGY) and other speci
 ggplot(tbl_n_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
   geom_boxplot(outlier.alpha = 0.2, alpha = 0.75) +
   scale_fill_manual(
-    values = c("FALSE" = "#EF3E42", "TRUE" = "#005A9C"),
+    values = c("FALSE" = dodger_red, "TRUE" = dodger_blue),
     labels = c("FALSE" = "No minimum", "TRUE" = "3-batter minimum")
   ) +
   scale_y_continuous(limits = c(0, 40), breaks = seq(0, 40, by = 10)) +
@@ -280,7 +284,7 @@ A three-batter minimum should eliminate the opportunity to call in a pitcher for
 ggplot(tbl_changes_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
   geom_boxplot(outlier.alpha = 0.2, alpha = 0.75) +
   scale_fill_manual(
-    values = c("FALSE" = "#EF3E42", "TRUE" = "#005A9C"),
+    values = c("FALSE" = dodger_red, "TRUE" = dodger_blue),
     labels = c("FALSE" = "No minimum", "TRUE" = "3-batter minimum")
   ) +
   theme(
@@ -352,6 +356,44 @@ pauses <-
 ```
 
 A mid-inning pitching change would add a pause in play that was not already scheduled, such as pauses in between innings. The differences in proportions of games with pauses in play due to mid-inning pitching changes were `r pauses[["pause_01"]]` for games with any added pauses, `r pauses[["pause_02"]]` for games with at least 2 pauses, and `r pauses[["pause_03"]]` for games with at least 3 pauses (See @tbl-pauses).
+
+```{r}
+#| code-summary: Plot
+#| fig-cap: Bar chart of pauses in play due to mid-inning pitching changes before and after rule change.
+#| label: fig-pauses
+
+# Wrangle data for plot
+tbl_changes_per_game_yearly |>
+  pivot_longer(
+    cols = c(`1 pause`, `≥2 pauses`, `≥3 pauses`),
+    names_to = "pause_type",
+    values_to = "is_true"
+  ) |>
+  mutate(pause_type = factor(pause_type, levels = c(
+    "1 pause", "≥2 pauses", "≥3 pauses"
+  ))) |>
+  group_by(rule_change, pause_type) |>
+  summarise(proportion = mean(is_true), .groups = "drop") |>
+  
+  # Plot
+  ggplot(aes(x = pause_type, y = proportion, fill = rule_change)) +
+  geom_bar(stat = "identity", position = "dodge", alpha = 0.75) +
+  
+  # Format
+  scale_fill_manual(values = c(
+    "No minimum" = dodger_red,
+    "3-batter minimum" = dodger_blue
+  )) +
+  theme(
+    legend.title = element_blank(),
+    legend.position = "inside",
+    legend.position.inside = c(0.8, 0.91),
+    axis.title = element_blank()
+  ) +
+  labs(
+    title = "Proportion of games with pauses in play because of mid-inning pitching changes"
+  )
+```
 
 ```{r}
 #| code-summary: Table
