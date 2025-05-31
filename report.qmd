@@ -158,19 +158,49 @@ Larger bases marginally reduced the steal distance, but the major change was the
 ```{r}
 #| code-summary: Test
 
+# Remove 2020 from test
+df_steals_exclude_2020 <- filter(df_steals, season != "2020")
+
+# Define factor order to control negative/positive sign of estimate
+df_steals_exclude_2020 <- mutate(df_steals_exclude_2020, rule_change = factor(
+  rule_change,
+  levels = c("TRUE", "FALSE")
+))
+
+# Test
+ttest_steal_attempts <- t.test(attempts ~ rule_change, data = df_steals_exclude_2020)
 ```
 
 ```{r}
 #| include: false
 
 # Environemnt variables for stealing change t tests
+ttest_steal_attempts_estimate <- unname(round(
+  ttest_steal_attempts[["estimate"]][1] - ttest_steal_attempts[["estimate"]][2],
+  1
+))
+
+ttest_steal_attempts_ci <- sprintf(
+  '%.2f to %.2f',
+  ttest_steal_attempts[['conf.int']][1],
+  ttest_steal_attempts[['conf.int']][2]
+)
+
+steal_attempt_increase_pct <- paste0(
+  round(
+    ttest_steal_attempts_estimate
+    / ttest_steal_attempts[["estimate"]][["mean in group FALSE"]]
+    * 100
+  ),
+  "%"
+)
 ```
 
-Text
+Teams began attempting more steals after the implementation of rules that encourage base stealing (@fig-steal-count). Mean number of steal attempts by teams in a single season, excluding 2020, increased by `r ttest_steal_attempts_estimate` after the rule changes (95% CI: `r ttest_steal_attempts_ci`. @tbl-steal-count). This is equivalent to a `r steal_attempt_increase_pct` increase.
 
 ```{r}
 #| code-summary: Plot
-#| fig-cap: Text.
+#| fig-cap: Bar charts of team steal attempts from years 2014-2024.
 #| label: fig-steal-count
 
 df_steals |>
@@ -202,9 +232,12 @@ df_steals |>
   scale_fill_manual(
     values = c(`TRUE` = dodger_red, `FALSE` = dodger_blue)
   ) +
-  theme(axis.title.y = element_text(angle = 0, vjust = 0.6)) +
+  theme(
+    axis.title.y = element_text(angle = 0, vjust = 0.6),
+    panel.grid.minor = element_blank()
+  ) +
   labs(
-    title = "Mean stolen base attempts by season and rule presence",
+    title = "Mean stolen base attempts by year and rule presence",
     x = "Season",
     y = "Attempts",
     fill = "Rule change"
@@ -213,9 +246,107 @@ df_steals |>
 
 ```{r}
 #| code-summary: Table
-#| tbl-cap: Text.
+#| tbl-cap: Mean steal attempts by year across 30 teams.
 #| label: tbl-steal-count
 
+df_steals |>
+  arrange(season) |>
+  select(team_id, season, attempts) |>
+  tidyr::pivot_wider(id_cols = team_id, names_from = season, values_from = attempts) |>
+  gtsummary::tbl_summary(
+    include = -team_id,
+    missing = "no",
+    statistic = everything() ~ "{mean} ± {sd}"
+  ) |>
+  gtsummary::modify_header(label = "**Year**")
+```
+
+```{r}
+#| code-summary: Test
+
+# Factor order
+df_steals_success <- mutate(df_steals, rule_change = factor(
+  rule_change,
+  levels = c("TRUE", "FALSE")
+))
+
+# Test
+ttest_steal_success <- t.test(sb_success_rate ~ rule_change, data = df_steals_success)
+```
+
+```{r}
+#| include: false
+
+# Environemnt variables for stealing change t tests
+ttest_steal_success_estimate <- 
+  (round(
+    ttest_steal_success[["estimate"]][1] - ttest_steal_success[["estimate"]][2],
+    2
+  ) * 100) |>
+  unname() |>
+  paste0("%")
+
+ttest_steal_success_ci <- paste0(
+  round(ttest_steal_success[['conf.int']][1] * 100),
+  "% to ",
+  round(ttest_steal_success[['conf.int']][2] * 100),
+  "%"
+)
+```
+
+In addition to more stolen base attempts, teams have become more successful at stealing bases (@fig-steal-success). Mean success rates increased by `r ttest_steal_success_estimate` after the rule changes (95% CI: `r ttest_steal_success_ci`. @tbl-steal-success).
+
+```{r}
+#| code-summary: Plot
+#| fig-cap: Point range chart of team steal success rates from years 2014-2024.
+#| label: fig-steal-success
+
+df_steals |>
+  
+  # Aggregate means and SDs
+  group_by(season, rule_change) |>
+  summarise(
+    mean = mean(sb_success_rate),
+    lower = mean - sd(sb_success_rate),
+    upper = mean + sd(sb_success_rate),
+    .groups = "drop"
+  ) |>
+  
+  # Plot
+  ggplot(aes(season, mean, color = rule_change)) +
+  geom_pointrange(aes(ymin = lower, ymax = upper), size = 1, linewidth = 1) +
+  
+  # Format
+  scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
+  scale_color_manual(
+    values = c(`TRUE` = dodger_red, `FALSE` = dodger_blue)
+  ) +
+  theme(
+    axis.title.y = element_blank(),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = "Stolen base success rates by year",
+    x = "Season",
+    color = "Rule change",
+    caption = "Mean ± SD shown"
+  )
+```
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Mean steal success rates by year across 30 teams.
+#| label: tbl-steal-success
+
+df_steals |>
+  select(season, team_id, sb_success_rate) |>
+  tidyr::pivot_wider(id_cols = team_id, names_from = season, values_from = sb_success_rate) |>
+  gtsummary::tbl_summary(
+    include = -team_id,
+    missing = "no",
+    statistic = everything() ~ "{mean} ± {sd}"
+  ) |>
+  gtsummary::modify_header(label = "**Year**")
 ```
 
 ### Extra-innings baserunner
@@ -235,6 +366,9 @@ df_steals |>
 # Get pitcher appearances and changes
 df_appearances <- read_csv(file.path(path, "pitcher_appearances.csv"))
 df_changes <- read_csv(file.path(path, "pitcher_changes.csv"))
+
+# Remove duplicates
+df_appearances <- distinct(df_appearances)
 
 # Change name for Cleveland to the Guardians
 df_appearances <- mutate(df_appearances, team_name = ifelse(
@@ -279,7 +413,7 @@ ttest_pitching_change_ci <- sprintf(
 )
 ```
 
-With a three-batter minimum, the Left-handed One-Out Guy (LOOGY) and other specialty roles were mostly eliminated. Fewer short-term pitchers should have led to fewer pitchers used in a game, though the change was barely noticeable throughout each season (@fig-pitchers). In fact, there was a very slight increase. The mean number of pitchers used per game was `r ttest_pitching_change_estimate` higher after the 2020 rule change (95% CI: `r ttest_pitching_change_ci`. @tbl-pitchers).
+With a three-batter minimum, the Left-handed One-Out Guy (LOOGY) and other specialty roles were mostly eliminated. Fewer short-term pitchers should have led to fewer pitchers used in a game, though the change was barely noticeable throughout each season (@fig-pitchers). In fact, there was a negligible increase. The mean number of pitchers used per game was `r ttest_pitching_change_estimate` higher after the 2020 rule change (95% CI: `r ttest_pitching_change_ci`. @tbl-pitchers).
 
 ```{r}
 #| code-summary: Plot
@@ -292,7 +426,7 @@ ggplot(tbl_n_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
   
   # Format
   scale_fill_manual(
-    values = c("FALSE" = dodger_red, "TRUE" = dodger_blue),
+    values = c("FALSE" = dodger_blue, "TRUE" = dodger_red),
     labels = c("FALSE" = "No minimum", "TRUE" = "3-batter minimum")
   ) +
   scale_y_continuous(limits = c(0, 40), breaks = seq(0, 40, by = 10)) +
@@ -300,18 +434,19 @@ ggplot(tbl_n_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
     axis.title.y = element_text(angle=0, vjust = 0.5),
     legend.title = element_blank(),
     legend.position = "inside",
-    legend.position.inside = c(0.87, 0.91)
+    legend.position.inside = c(0.87, 0.91),
+    panel.grid.minor = element_blank()
   ) +
   labs(
     title = "Total pitchers per game by year",
-    x = "Year",
+    x = "Season",
     y = "Count"
   )
 ```
 
 ```{r}
 #| code-summary: Table
-#| tbl-cap: Mean pitcher appearances by year.
+#| tbl-cap: Mean pitcher appearances by year across 25,193 games.
 #| label: tbl-pitchers
 
 tbl_n_per_game_yearly |>
@@ -393,25 +528,26 @@ ggplot(tbl_changes_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
   
   # Format
   scale_fill_manual(
-    values = c("FALSE" = dodger_red, "TRUE" = dodger_blue),
+    values = c("FALSE" = dodger_blue, "TRUE" = dodger_red),
     labels = c("FALSE" = "No minimum", "TRUE" = "3-batter minimum")
   ) +
   theme(
     axis.title.y = element_text(angle=0, vjust = 0.6),
     legend.title = element_blank(),
     legend.position = "inside",
-    legend.position.inside = c(0.8, 0.91)
+    legend.position.inside = c(0.8, 0.91),
+    panel.grid.minor = element_blank()
   ) +
   labs(
     title = "Total mid-inning pitching changes per game by year",
-    x = "Year",
+    x = "Season",
     y = "Count"
   )
 ```
 
 ```{r}
 #| code-summary: Table
-#| tbl-cap: Mean mid-inning pitching changes by year.
+#| tbl-cap: Mean mid-inning pitching changes by year across 25,193 games.
 #| label: tbl-mid-inning
 
 tbl_changes_per_game_yearly |>
@@ -498,10 +634,10 @@ tbl_changes_per_game_yearly |>
   ) +
   
   # Format
-  scale_y_continuous(limits = c(0, 1)) +
+  scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
   scale_fill_manual(values = c(
-    "No minimum" = dodger_red,
-    "3-batter minimum" = dodger_blue
+    "No minimum" = dodger_blue,
+    "3-batter minimum" = dodger_red
   )) +
   theme(
     legend.title = element_blank(),
@@ -510,14 +646,14 @@ tbl_changes_per_game_yearly |>
     axis.title = element_blank()
   ) +
   labs(
-    title = "Proportion of games with pauses in play because of mid-inning pitching changes",
+    title = "Percentage of games with pauses in play due to mid-inning pitching changes",
     caption = "*p<.05\n***p<.001"
   )
 ```
 
 ```{r}
 #| code-summary: Table
-#| tbl-cap: Count and proportions of games with various numbers of pauses in play due to mid-inning pitching changes.
+#| tbl-cap: Count and proportions of  25,193 games with various numbers of pauses in play due to mid-inning pitching changes.
 #| label: tbl-pauses
 
 # Test result by rule change

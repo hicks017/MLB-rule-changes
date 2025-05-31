@@ -50,6 +50,9 @@ df_changes <- read_csv(file.path(path, "pitcher_changes.csv"))
 ```{r}
 #| code-summary: Prepare data
 
+# Remove duplicates
+df_appearances <- distinct(df_appearances)
+
 # Change name for Cleveland to the Guardians
 df_appearances <- mutate(df_appearances, team_name = ifelse(
   endsWith(team_name, "Indians"),
