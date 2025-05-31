@@ -114,11 +114,109 @@ if (basename(getwd()) == "explore data") {
 } else if (basename(getwd()) == "MLB-rule-changes") {
   path <- "resources/data"
 } else {print("Failed to set path")}
+
+# Define colors for plots
+dodger_red <- "#EF3E42"
+dodger_blue <- "#005A9C"
 ```
 
 ## Results
 
 ### Base stealing encouragements
+
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Get steal attempts and results
+df_steals <- read_csv(file.path(path, "team_steals.csv"))
+
+# Modify columns and create new variables
+df_steals <- mutate(
+  df_steals,
+  
+  # Change name for Cleveland to the Guardians
+  team_name = ifelse(
+    endsWith(team_name, "Indians"),
+    "Cleveland Guardians",
+    team_name
+  ),
+  
+  # Count total attempts
+  attempts = stolen_bases + caught_stealing,
+  
+  # Indicate rule change
+  rule_change = ifelse(season < 2023, FALSE, TRUE),
+  
+  # Factor the season variable
+  season = factor(season)
+)
+```
+
+Larger bases marginally reduced the steal distance, but the major change was the pitcher disengagement policy. Now pitchers only have three pickoff attempts. If they miss the third attempt then baserunners advance a base. This rule lets runners draw two pickoff attempts before pitchers become hesitant to risk a third try, enabling them to take a bigger lead than before.
+
+```{r}
+#| code-summary: Test
+
+```
+
+```{r}
+#| include: false
+
+# Environemnt variables for stealing change t tests
+```
+
+Text
+
+```{r}
+#| code-summary: Plot
+#| fig-cap: Text.
+#| label: fig-steal-count
+
+df_steals |>
+  
+  # Aggregate means and SDs
+  group_by(season, rule_change) |>
+  summarise(
+    attempts_mean = mean(attempts),
+    attempts_sd = sd(attempts),
+    .groups = "drop"
+  ) |>
+  
+  # Plot
+  ggplot(aes(x = season, y = attempts_mean, fill = rule_change)) +
+  geom_bar(
+    stat = "identity",
+    color = "gray10",
+    width = 0.7,
+    alpha = 0.75
+  ) +
+  geom_errorbar(
+    aes(ymin = attempts_mean - attempts_sd, ymax = attempts_mean + attempts_sd),
+    width = 0.2,
+    color = "gray10",
+    alpha = 0.75
+  ) +
+  
+  # Format
+  scale_fill_manual(
+    values = c(`TRUE` = dodger_red, `FALSE` = dodger_blue)
+  ) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.6)) +
+  labs(
+    title = "Mean stolen base attempts by season and rule presence",
+    x = "Season",
+    y = "Attempts",
+    fill = "Rule change"
+  )
+```
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Text.
+#| label: tbl-steal-count
+
+```
 
 ### Extra-innings baserunner
 
@@ -156,10 +254,6 @@ tbl_n_per_game_yearly <-
     rule_change = factor(ifelse(year < 2020, FALSE, TRUE), levels = c("TRUE", "FALSE")),
     year = factor(year)
   )
-
-# Define colors for plots
-dodger_red <- "#EF3E42"
-dodger_blue <- "#005A9C"
 ```
 
 ```{r}
@@ -195,6 +289,8 @@ With a three-batter minimum, the Left-handed One-Out Guy (LOOGY) and other speci
 # Plot pitchers per game per year
 ggplot(tbl_n_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
   geom_boxplot(outlier.alpha = 0.2, alpha = 0.75) +
+  
+  # Format
   scale_fill_manual(
     values = c("FALSE" = dodger_red, "TRUE" = dodger_blue),
     labels = c("FALSE" = "No minimum", "TRUE" = "3-batter minimum")
@@ -294,12 +390,14 @@ A three-batter minimum should eliminate the opportunity to call in a pitcher for
 # Plot pitchers per game per year
 ggplot(tbl_changes_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
   geom_boxplot(outlier.alpha = 0.2, alpha = 0.75) +
+  
+  # Format
   scale_fill_manual(
     values = c("FALSE" = dodger_red, "TRUE" = dodger_blue),
     labels = c("FALSE" = "No minimum", "TRUE" = "3-batter minimum")
   ) +
   theme(
-    axis.title.y = element_text(angle=0, vjust = 0.5),
+    axis.title.y = element_text(angle=0, vjust = 0.6),
     legend.title = element_blank(),
     legend.position = "inside",
     legend.position.inside = c(0.8, 0.91)
