@@ -107,6 +107,7 @@ library(tidyr)
 library(tibble)
 library(ggplot2)
 library(broom)
+library(lubridate)
 
 # Uncommon packages
 library(gtsummary)
@@ -628,6 +629,155 @@ ggplot(df_extras, aes(x = year, y = batters_until_first_run, fill = rule_change)
 
 ### Pitch clock
 
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Get distinct play durations
+df_duration <- read_csv(file.path(path, "play_duration.csv"))
+df_duration <- distinct(df_duration)
+
+# Factorize season, split data, and filter out outliers
+df_duration <- mutate(df_duration, season = factor(season))
+
+tbl_duration_filtered_pre <- filter(
+  df_duration,
+  duration_sec > 0
+  & duration_sec < 271 # 95th percentile
+  & year(startTime) < 2023
+)
+tbl_duration_filtered_post <- filter(
+  df_duration,
+  duration_sec > 0
+  & duration_sec < 271 # 95th percentile
+  & year(startTime) >= 2023
+)
+
+tbl_duration_filtered_pre[["rule_change"]] <- FALSE
+tbl_duration_filtered_post[["rule_change"]] <- TRUE
+
+# Combine tables
+tbl_duration_both <- rbind(tbl_duration_filtered_post, tbl_duration_filtered_pre)
+
+# Remove two observations with multiple records
+tbl_duration_both <- 
+  tbl_duration_both |>
+  group_by(game_pk, startTime) |>
+  mutate(n = row_number()) |>
+  ungroup() |>
+  filter(n == 1)
+```
+
+```{r}
+#| code-summary: Test
+
+# t test
+ttest_duration <- t.test(duration_sec ~ rule_change, data = tbl_duration_both)
+```
+
+```{r}
+#| include: false
+
+# Environemnt variables for pitch clock t tests
+ttest_duration_estimate <- unname(round(
+  ttest_duration[["estimate"]][1] - ttest_duration[["estimate"]][2],
+  1
+))
+
+ttest_duration_ci <- sprintf(
+  '%.1f to %.1f',
+  ttest_duration[['conf.int']][1],
+  ttest_duration[['conf.int']][2]
+)
+```
+
+Text (when removing outliers).
+
+```{r}
+#| code-summary: Plot
+#| fig-cap: Density plots of play duration from years 2014-2024.
+#| label: fig-duration
+
+# Plot play duration by rule change status
+ggplot() +
+  
+  # Post rule change
+  geom_density(
+    data = tbl_duration_filtered_post,
+    aes(x = duration_sec, fill = rule_change),
+    color = NA, alpha = 0.75,
+  ) +
+  
+  # Pre rule change
+  geom_density(
+    data = tbl_duration_filtered_pre,
+    aes(x = duration_sec, fill = rule_change),
+    color = NA, alpha = 0.75,
+  ) +
+  
+  # Post rule change (line)
+  geom_density(
+    data = tbl_duration_filtered_post,
+    aes(x = duration_sec),
+    color = dodger_red,
+    linewidth = 1
+  ) +
+  
+  # Pre rule change (line)
+  geom_density(
+    data = tbl_duration_filtered_pre,
+    aes(x = duration_sec),
+    color = "black"
+  ) +
+  
+  # Formatting
+  scale_fill_manual(
+    name = "Rule Change",
+    values = c(`FALSE` = dodger_blue, `TRUE` = dodger_red)
+  ) +
+  
+  # Format
+  scale_x_continuous(breaks = seq(0, 250, by = 50), expand = c(0,0)) +
+  
+  theme(
+    panel.grid.minor = element_blank(),
+    axis.title.y = element_text(angle = 0, vjust = 0.67),
+    legend.position = "inside",
+    legend.position.inside = c(0.85, 0.9)
+  ) +
+  
+  labs(
+    title = "Distributions of play duration before and after pitch clock implementation",
+    subtitle = paste0(
+      "Total plays = ", formatC(nrow(tbl_duration_both), format = "d", big.mark = ",")
+    ),
+    x = "Duration (seconds)",
+    y = "Density\nof plays",
+    caption = "Filtered for 0 < duration < 271 (95th percentile)"
+  )
+```
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Mean play duration by year.
+#| label: tbl-duration
+
+tbl_duration_both |>
+  select(game_pk, startTime, season, duration_sec) |>
+  arrange(season) |>
+  pivot_wider(
+    id_cols = c(game_pk, startTime),
+    names_from = season,
+    values_from = duration_sec
+  ) |>
+  gtsummary::tbl_summary(
+    include = -c(game_pk, startTime),
+    type = everything() ~ "continuous",
+    statistic = everything() ~ "{mean} ± {sd}",
+    missing = "no"
+  )
+```
+
 ### Universal designated hitter
 
 ### Defensive shift ban
@@ -721,7 +871,7 @@ ggplot(tbl_n_per_game_yearly, aes(x = year, y = n, fill = rule_change)) +
 
 ```{r}
 #| code-summary: Table
-#| tbl-cap: Mean pitcher appearances by year across.
+#| tbl-cap: Mean pitcher appearances by year.
 #| label: tbl-pitchers
 
 tbl_n_per_game_yearly |>
