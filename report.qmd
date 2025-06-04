@@ -601,7 +601,7 @@ ttest_marathons_runs_ci <- sprintf(
 )
 ```
 
-Since it became easier to score runs, the fewer batters were needed to initially break the tie (@fig-extras-batters). The mean number of batter appearances before scoring the first run in extra innings decreased by `r ttest_extras_batters_estimate` (95% CI: `r ttest_extras_runs_ci`. TABLE). Marathon games saw the greatest reduction, with a staggering `r ttest_marathons_batters_estimate` fewer batters required to earn the first run during extra innings (95% CI: `r ttest_marathons_runs_ci`. @fig-marathons-batters).
+Since it became easier to score runs, the fewer batters were needed to initially break the tie (@fig-extras-batters). The mean number of batter appearances before scoring the first run in extra innings decreased by `r ttest_extras_batters_estimate` (95% CI: `r ttest_extras_runs_ci`. @tbl-extra-batters). Marathon games saw the greatest reduction, with a staggering `r ttest_marathons_batters_estimate` fewer batters required to earn the first run during extra innings (95% CI: `r ttest_marathons_runs_ci`. @fig-marathons-batters).
 
 ```{r}
 #| code-summary: Plot
@@ -625,6 +625,23 @@ ggplot(df_extras, aes(x = year, y = batters_until_first_run, fill = rule_change)
     x = "Season",
     fill = "Rule change"
   )
+```
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Mean number of batters until first run scored in extra innings by year.
+#| label: tbl-extra-batters
+
+df_extras |>
+    select(game_pk, year, batters_until_first_run) |>
+    pivot_wider(id_cols = game_pk, names_from = year, values_from = batters_until_first_run) |>
+    gtsummary::tbl_summary(
+        include = -game_pk,
+        missing = "no",
+        type = everything() ~ "continuous",
+        statistic = everything() ~ "{mean} ± {sd}"
+    ) |>
+    gtsummary::modify_header(label = "**Year**")
 ```
 
 ### Pitch clock
@@ -666,6 +683,15 @@ tbl_duration_both <-
   mutate(n = row_number()) |>
   ungroup() |>
   filter(n == 1)
+
+# Create table with combined play duration
+tbl_game_duration <- 
+  tbl_duration_both |>
+  filter(duration_sec < 271) |>
+  group_by(game_pk, season, rule_change) |>
+  summarise(
+    duration_all_plays = sum(duration_sec) / (60 * 60), .groups = "drop" # Output in hours
+  )
 ```
 
 ```{r}
@@ -691,7 +717,9 @@ ttest_duration_ci <- sprintf(
 )
 ```
 
-Text (when removing outliers).
+The pitch clock was introduced to increase pace of the game and reduce downtime between plays. When analyzing play duration, major outliers were identified that potentially relate to weather delays, plays under review, or other miscellaneous events that pause the game. The 95th percentile of play duration was used as the threshold for removing outliers in this analysis.
+
+As a result of the new pitch clock rules, the length of individual plays was reduced (@fig-duration). The mean play duration decreased by `r ttest_duration_estimate` seconds after the introduction of the pitch clock (95% CI: `r ttest_duration_ci`. @tbl-duration).
 
 ```{r}
 #| code-summary: Plot
@@ -775,6 +803,53 @@ tbl_duration_both |>
     type = everything() ~ "continuous",
     statistic = everything() ~ "{mean} ± {sd}",
     missing = "no"
+  )
+```
+
+Text for combined play duration. Duration reduced by x%, equivalent to X minutes.
+
+```{r}
+#| code-summary: Plot
+#| fig-cap: Bar chart of mean total play duration from years 2014-2024.
+#| label: fig-total-duration
+
+# Prepare data for bar charts
+tbl_game_duration |>
+  group_by(season, rule_change) |>
+  summarise(
+    duration_mean = mean(duration_all_plays),
+    duration_sd = sd(duration_all_plays),
+    .groups = "drop"
+  ) |>
+  
+  # Plot
+  ggplot(aes(x = season, y = duration_mean, fill = rule_change)) +
+  geom_bar(
+    stat = "identity",
+    color = "gray10",
+    width = 0.7,
+    alpha = 0.75
+  ) +
+  geom_errorbar(
+    aes(ymin = duration_mean - duration_sd, ymax = duration_mean + duration_sd),
+    width = 0.2,
+    color = "gray10",
+    alpha = 0.75
+  ) +
+  
+  # Format
+  scale_fill_manual(
+    values = c(`TRUE` = dodger_red, `FALSE` = dodger_blue)
+  ) +
+  theme(
+    axis.title.y = element_text(angle = 0, vjust = 0.5),
+    panel.grid.minor = element_blank()
+  ) +
+  labs(
+    title = "Mean combined play duration by year and rule presence",
+    x = "Season",
+    y = "Hours",
+    fill = "Rule change"
   )
 ```
 
