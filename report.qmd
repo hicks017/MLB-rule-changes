@@ -18,7 +18,7 @@ description: An analysis of rule changes recent to 2025 Major League Baseball.
 editor: visual
 ---
 
-[Source code](https://github.com/hicks017/MLB-rule-changes "GitHu: Hicks017 MLB-rule-changes") \| PDF version (WIP)
+[Source code](https://github.com/hicks017/MLB-rule-changes "GitHu: Hicks017 MLB-rule-changes"){target="_blank"} \| PDF version (WIP)
 
 ## Background
 
@@ -92,9 +92,9 @@ Various metrics tailored to each rule change were investigated to perform a robu
 
 ### WIP Software, reproducibility, and data licensing
 
-All data-retrieval and preprocessing was executed using [Python 3.11.6](https://www.python.org/downloads/release/python-3116/ "Python Release 3.11.6"). The exploration and final analysis were written with [R 4.4.3](https://cran.r-project.org/bin/windows/base/old/4.4.3/ "CRAN - R 4.4.3") within a lightweight Docker container. Versioned scripts and written reports were saved on a public [GitHub repository](https://github.com/hicks017/MLB-rule-changes "MLB Rule Changes - Christian Hicks") to ensure transparency.
+All data-retrieval and preprocessing was executed using [Python 3.11.6](https://www.python.org/downloads/release/python-3116/ "Python Release 3.11.6"){target="_blank"}. The exploration and final analysis were written with [R 4.4.3](https://cran.r-project.org/bin/windows/base/old/4.4.3/ "CRAN - R 4.4.3"){target="_blank"} within a lightweight Docker container. Versioned scripts and written reports were saved on a public [GitHub repository](https://github.com/hicks017/MLB-rule-changes "MLB Rule Changes - Christian Hicks"){target="_blank"} to ensure transparency.
 
-Raw data originated from the free, official [MLB Stats API.](https://statsapi.mlb.com/api/ "MLB Stats API") No personal player data or personally identifiable information were used.
+Raw data originated from the free, official [MLB Stats API.](https://statsapi.mlb.com/api/ "MLB Stats API base URL"){target="_blank"} No personal player data or personally identifiable information were used.
 
 ```{r}
 #| code-summary: Packages
@@ -806,11 +806,34 @@ tbl_duration_both |>
   )
 ```
 
-Text for combined play duration. Duration reduced by x%, equivalent to X minutes.
+```{r}
+#| code-summary: Test
+
+# t test
+ttest_total_duration <- t.test(duration_all_plays ~ rule_change, data = tbl_game_duration)
+```
+
+```{r}
+#| include: false
+
+# Environemnt variables for pitch clock t tests
+ttest_total_duration_estimate <- unname(round(
+  (ttest_total_duration[["estimate"]][1] - ttest_total_duration[["estimate"]][2]) * 60,
+  1
+))
+
+ttest_total_duration_ci <- sprintf(
+  '%.1f to %.1f',
+  ttest_total_duration[['conf.int']][1] * 60,
+  ttest_total_duration[['conf.int']][2]* 60
+)
+```
+
+Individual play durations were summed to determine a combined duration of game play. An overall reduction was observed after pitch clock implementation (@fig-total-duration). Mean combined play duration decreased by `r ttest_total_duration_estimate` minutes (95% CI: `r ttest_total_duration_ci`. @tbl-total-duration).
 
 ```{r}
 #| code-summary: Plot
-#| fig-cap: Bar chart of mean total play duration from years 2014-2024.
+#| fig-cap: Bar chart of mean total play duration (hours) from years 2014-2024.
 #| label: fig-total-duration
 
 # Prepare data for bar charts
@@ -850,6 +873,26 @@ tbl_game_duration |>
     x = "Season",
     y = "Hours",
     fill = "Rule change"
+  )
+```
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Mean total play duration (hours) by year across 25,192 games.
+#| label: tbl-total-duration
+
+tbl_game_duration |>
+  select(game_pk, season, duration_all_plays) |>
+  pivot_wider(
+    id_cols = game_pk,
+    names_from = season,
+    values_from = duration_all_plays
+  ) |>
+  gtsummary::tbl_summary(
+    include = -game_pk,
+    type = everything() ~ "continuous",
+    statistic = everything() ~ "{mean} ± {sd}",
+    missing = "no"
   )
 ```
 
