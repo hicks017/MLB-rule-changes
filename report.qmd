@@ -181,12 +181,11 @@ ttest_steal_attempts <- t.test(attempts ~ rule_change, data = df_steals_exclude_
 
 # Environemnt variables for stealing change t tests
 ttest_steal_attempts_estimate <- unname(round(
-  ttest_steal_attempts[["estimate"]][1] - ttest_steal_attempts[["estimate"]][2],
-  1
+  ttest_steal_attempts[["estimate"]][1] - ttest_steal_attempts[["estimate"]][2]
 ))
 
 ttest_steal_attempts_ci <- sprintf(
-  '%.2f to %.2f',
+  '%.0f to %.0f',
   ttest_steal_attempts[['conf.int']][1],
   ttest_steal_attempts[['conf.int']][2]
 )
@@ -595,7 +594,7 @@ ttest_marathons_batters_estimate <- unname(
 )
 
 ttest_marathons_runs_ci <- sprintf(
-  '%.1f to %.1f',
+  '%.0f to %.0f',
   ttest_marathons_batters[['conf.int']][1],
   ttest_marathons_batters[['conf.int']][2]
 )
@@ -950,7 +949,7 @@ ttest_pitching_change_estimate <- unname(round(
 ))
 
 ttest_pitching_change_ci <- sprintf(
-  '%.2f to %.2f',
+  '%.1f to %.1f',
   ttest_pitching_changes[['conf.int']][1],
   ttest_pitching_changes[['conf.int']][2]
 )
@@ -1052,7 +1051,7 @@ ttest_mid_change_estimate <- unname(round(
 ))
 
 ttest_mid_change_ci <- sprintf(
-  '%.2f to %.2f',
+  '%.1f to %.1f',
   ttest_mid_changes[['conf.int']][1],
   ttest_mid_changes[['conf.int']][2]
 )
@@ -1138,7 +1137,7 @@ pauses <-
   # Wrangle into a named list
   pivot_longer(cols = -rule_change) |>
   pivot_wider(names_from = rule_change, values_from = value) |>
-  mutate(diff = paste0(round((`3-batter minimum` - `No minimum`) * 100, 1), "%")) |>
+  mutate(diff = paste0(round((`3-batter minimum` - `No minimum`) * 100), "%")) |>
   select(name, diff) |>
   tibble::deframe()
 ```
