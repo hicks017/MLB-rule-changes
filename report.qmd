@@ -897,6 +897,8 @@ tbl_game_duration |>
 
 ### Universal designated hitter
 
+Note: Show OBP as bar charts with SD.
+
 ### Defensive shift ban
 
 ### 3-batter minimum
