@@ -897,7 +897,95 @@ tbl_game_duration |>
 
 ### Universal designated hitter
 
-Note: Show OBP as bar charts with SD.
+```{r}
+#| code-summary: Data
+#| message: false
+
+# Get OBP for NL pitcher and DH positions
+df_nl_ops <- read_csv(file.path(path, "nl_ops.csv"))
+
+# Remove duplicates
+df_nl_ops <- distinct(df_nl_ops)
+
+# Factorize season
+df_nl_ops <- mutate(df_nl_ops, year = factor(year))
+```
+
+TEXT (batting appearances, with discussion showing that pitchers had fewer anyways and required additional management).
+
+PLOT.
+
+TABLE.
+
+TEXT.
+
+```{r}
+#| code-summary: Plot
+#| fig-cap: Bar chart of mean on-base percentage (OBP) by position from years 2014-2024.
+#| label: fig-obp
+
+# Prepare data for bar charts
+df_nl_ops |>
+  group_by(year, position) |>
+  summarise(
+    obp_mean = mean(OBP, na.rm = TRUE),
+    obp_sd = sd(OBP, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  
+  # Plot
+  ggplot(aes(x = year, y = obp_mean, fill = position)) +
+  geom_errorbar(
+    aes(ymin = obp_mean, ymax = obp_mean + obp_sd),
+    width = 0.2,
+    color = "gray10",
+    alpha = 0.75
+  ) +
+  geom_bar(
+    stat = "identity",
+    color = "gray10",
+    width = 0.7,
+    alpha = 0.75
+  ) +
+  
+  # Format
+  scale_y_continuous(
+    labels = scales::number_format(accuracy = 0.001),
+    limits = c(0, 0.6),
+    breaks = seq(0, 0.6, by = 0.2)
+  ) +
+  scale_fill_manual(
+    values = c(DH = dodger_red, P = dodger_blue)
+  ) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5)) +
+  labs(
+    title = "Mean on-base percentage by position and year",
+    x = "Season",
+    y = "OBP",
+    fill = "Position"
+  )
+```
+
+```{r}
+#| code-summary: Table
+#| tbl-cap: Mean mean on-base percentage (OBP) of P/DH position by year across 12,602 National League home games.
+#| label: tbl-obp
+
+df_nl_ops |>
+  select(game_pk, year, OBP) |>
+  pivot_wider(
+    id_cols = game_pk,
+    names_from = year,
+    values_from = OBP
+  ) |>
+  gtsummary::tbl_summary(
+    include = -game_pk,
+    type = everything() ~ "continuous",
+    digits = everything() ~ 3,
+    statistic = everything() ~ "{mean} ± {sd}",
+    missing = "no"
+  )
+```
 
 ### Defensive shift ban
 
